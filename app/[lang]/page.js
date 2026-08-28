@@ -1,21 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
-import Navbar from "../components/Navbar.js";
-import Hero from "../components/Hero.js";
-import ArchiveCard from "../components/ArchiveCard.js";
-import Footer from "../components/Footer.js";
-import { traditionalKhmerDesserts } from "../data/entries.js";
+import Navbar from "../../components/Navbar.js";
+import Hero from "../../components/Hero.js";
+import ArchiveCard from "../../components/ArchiveCard.js";
+import Footer from "../../components/Footer.js";
+import { traditionalKhmerDesserts } from "../../data/entries.js";
 
 export default function Home() {
-  const [language, setLanguage] = useState("en");
+  const params = useParams();
+  const language = params?.lang || 'en';
 
   const featuredEntries = traditionalKhmerDesserts.slice(0, 4);
 
   return (
     <>
-      <Navbar language={language} onLanguageChange={setLanguage} />
+      <Navbar language={language} />
       <Hero totalEntries={traditionalKhmerDesserts.length} language={language} />
       
       <main className="container" id="archive">
@@ -32,7 +33,7 @@ export default function Home() {
         </div>
         
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px', marginBottom: '40px' }}>
-          <Link href="/archive" className="btn-cta-primary" style={{ textDecoration: 'none' }}>
+          <Link href={`/${language}/archive`} className="btn-cta-primary" style={{ textDecoration: 'none' }}>
             {language === 'en' ? 'See all archive' : 'មើលបណ្ណសារទាំងអស់'}
           </Link>
         </div>
