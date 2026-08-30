@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Battambang:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 /* CSS RESET & VARIABLES */
 *, *::before, *::after {
@@ -19,8 +19,8 @@
   --text-secondary: #5A6561;
   --border-subtle: #E8E2D5;
   
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Playfair Display', 'Battambang', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', 'Battambang', -apple-system, BlinkMacSystemFont, sans-serif;
   
   --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
   --transition-fast: 0.25s var(--ease-editorial);

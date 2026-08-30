@@ -6,15 +6,6 @@ export const metadata = {
   description: collection.description,
 };
 
-export default async function RootLayout({ children, params }) {
-  const resolvedParams = await params;
-  const lang = resolvedParams?.lang || 'en';
-  
-  return (
-    <html lang={lang}>
-      <body>
-        {children}
-      </body>
-    </html>
-  );
+export default async function LocaleLayout({ children, params }) {
+  return children;
 }
