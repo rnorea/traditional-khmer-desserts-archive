@@ -1,21 +1,21 @@
 import Link from 'next/link';
 import { t } from '../data/translations.js';
 
-export default function ArchiveCard({ entry, language }) {
+export default function EntryCard({ entry, language }) {
   const text = t[language] || t.en;
-  
-  const displayName = language === 'km' ? (entry.nativeName || entry.name) : entry.name;
-  const displayCategory = language === 'km' ? (entry.categoryKm || entry.category || 'បង្អែម') : (entry.category || 'Desserts');
-  const displayDescription = language === 'km' ? (entry.descriptionKm || entry.description) : entry.description;
-  const displayLocation = language === 'km' ? (entry.locationKm || entry.location) : entry.location;
+
+  const displayName = language === 'kh' ? (entry.nativeName || entry.name) : entry.name;
+  const displayCategory = language === 'kh' ? (entry.categoryKm || entry.category || 'បង្អែម') : (entry.category || 'Desserts');
+  const displayDescription = language === 'kh' ? (entry.descriptionKm || entry.description) : entry.description;
+  const displayLocation = language === 'kh' ? (entry.locationKm || entry.location) : entry.location;
 
   return (
     <Link href={`/archive/${entry.id}`} className="archive-card" style={{ textDecoration: 'none', color: 'inherit' }}>
       <div className="card-image-wrap">
         <span className="card-tag">{displayCategory}</span>
-        <img 
-          src={entry.images?.[0] || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600"} 
-          alt={displayName} 
+        <img
+          src={entry.images?.[0] || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600"}
+          alt={displayName}
         />
       </div>
       <div className="card-body">

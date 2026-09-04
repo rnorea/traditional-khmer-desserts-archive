@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "../../../../components/Navbar.js";
 import Footer from "../../../../components/Footer.js";
-import ArchiveCard from "../../../../components/ArchiveCard.js";
+import EntryCard from "../../../../components/EntryCard.js";
 import { traditionalKhmerDesserts } from "../../../../data/entries.js";
 
 export default function DessertDetail() {
@@ -96,7 +96,7 @@ export default function DessertDetail() {
             <h3>{language === 'en' ? 'You Might Also Like' : 'បង្អែមផ្សេងទៀតដែលអ្នកអាចចូលចិត្ត'}</h3>
             <div className="suggestions-grid">
               {suggestions.map(sug => (
-                <ArchiveCard key={sug.id} entry={sug} language={language} />
+                <EntryCard key={sug.id} entry={sug} language={language} />
               ))}
             </div>
           </div>

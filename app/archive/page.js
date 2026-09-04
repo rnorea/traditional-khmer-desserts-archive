@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import Navbar from "../../components/Navbar.js";
 import ArchiveControls from "../../components/ArchiveControls.js";
-import ArchiveCard from "../../components/ArchiveCard.js";
+import EntryCard from "../../components/EntryCard.js";
 import ArchiveListItem from "../../components/ArchiveListItem.js";
 import Footer from "../../components/Footer.js";
 import { traditionalKhmerDesserts } from "../../data/entries.js";
@@ -89,7 +89,7 @@ export default function ArchivePage() {
         {viewMode === "grid" ? (
           <div className="archive-grid">
             {filteredAndSortedEntries.map(entry => (
-              <ArchiveCard key={entry.id} entry={entry} language={language} />
+              <EntryCard key={entry.id} entry={entry} language={language} />
             ))}
           </div>
         ) : (

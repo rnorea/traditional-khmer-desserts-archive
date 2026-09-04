@@ -4,12 +4,12 @@ import { t } from '../data/translations.js';
 export default function ArchiveListItem({ entry, language }) {
   const text = t[language] || t.en;
 
-  const displayName = language === 'km' ? (entry.nativeName || entry.name) : entry.name;
-  const displayCategory = language === 'km' ? (entry.categoryKm || entry.category || 'បង្អែម') : (entry.category || 'Desserts');
-  const displayDescription = language === 'km' ? (entry.descriptionKm || entry.description) : entry.description;
-  const displayLocation = language === 'km' ? (entry.locationKm || entry.location) : entry.location;
-  const displayPrepTime = language === 'km' ? (entry.prepTimeKm || entry.prepTime || text.na) : (entry.prepTime || text.na);
-  const displayPrimaryIng = language === 'km' ? (entry.ingredientsKm?.[0] || entry.ingredients?.[0]) : entry.ingredients?.[0];
+  const displayName = language === 'kh' ? (entry.nativeName || entry.name) : entry.name;
+  const displayCategory = language === 'kh' ? (entry.categoryKm || entry.category || 'បង្អែម') : (entry.category || 'Desserts');
+  const displayDescription = language === 'kh' ? (entry.descriptionKm || entry.description) : entry.description;
+  const displayLocation = language === 'kh' ? (entry.locationKm || entry.location) : entry.location;
+  const displayPrepTime = language === 'kh' ? (entry.prepTimeKm || entry.prepTime || text.na) : (entry.prepTime || text.na);
+  const displayPrimaryIng = language === 'kh' ? (entry.ingredientsKm?.[0] || entry.ingredients?.[0]) : entry.ingredients?.[0];
 
   return (
     <Link href={`/archive/${entry.id}`} className="list-row" style={{ textDecoration: 'none', color: 'inherit' }}>

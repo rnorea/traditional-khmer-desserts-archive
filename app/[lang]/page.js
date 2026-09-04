@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "../../components/Navbar.js";
 import Hero from "../../components/Hero.js";
-import ArchiveCard from "../../components/ArchiveCard.js";
+import EntryCard from "../../components/EntryCard.js";
 import Footer from "../../components/Footer.js";
 import { traditionalKhmerDesserts } from "../../data/entries.js";
 
@@ -28,7 +28,7 @@ export default function Home() {
 
         <div className="archive-grid">
           {featuredEntries.map(entry => (
-            <ArchiveCard key={entry.id} entry={entry} language={language} />
+            <EntryCard key={entry.id} entry={entry} language={language} />
           ))}
         </div>
         
