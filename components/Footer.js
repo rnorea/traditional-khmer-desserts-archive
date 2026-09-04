@@ -10,7 +10,7 @@ export default function Footer({ language }) {
         <div className="footer-content">
           <div className="footer-brand">
             <a href="#" className="brand-logo">{text.brand}</a>
-            <p>{collection.description}</p>
+            <p>{language === 'kh' ? (collection.descriptionKm || collection.description) : collection.description}</p>
           </div>
 
           <div className="footer-links-group">
@@ -36,7 +36,7 @@ export default function Footer({ language }) {
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; 2026 {collection.name}. {text.allRights}</p>
+          <p>&copy; 2026 {language === 'kh' ? (collection.nameKm || collection.name) : collection.name}. {text.allRights}</p>
           <p>{text.curatedBy} {collection.curator}</p>
         </div>
       </div>

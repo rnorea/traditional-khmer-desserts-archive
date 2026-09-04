@@ -23,11 +23,13 @@ export default function ArchivePage() {
 
     if (filterType !== "all") {
       result = result.filter(entry => {
-        const cat = entry.category?.toLowerCase() || "";
-        if (filterType === "appetizers") return cat.includes("appetizer") || cat.includes("snack");
-        if (filterType === "mains") return cat.includes("main");
-        if (filterType === "desserts") return cat.includes("dessert");
-        if (filterType === "drinks") return cat.includes("drink") || cat.includes("beverage");
+        const cat = Array.isArray(entry.category) 
+          ? entry.category.map(c => c.toLowerCase()).join(" ") 
+          : (entry.category?.toLowerCase() || "");
+        if (filterType === "stickyRice") return cat.includes("sticky rice");
+        if (filterType === "sweetSoups") return cat.includes("soup");
+        if (filterType === "steamedSweets") return cat.includes("steamed");
+        if (filterType === "snacks") return cat.includes("snack");
         return true;
       });
     }

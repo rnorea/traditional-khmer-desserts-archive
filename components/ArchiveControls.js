@@ -35,10 +35,10 @@ export default function ArchiveControls({
             <div className="select-custom">
               <select id="typeFilter" value={filterType} onChange={(e) => onFilterChange(e.target.value)}>
                 <option value="all">{text.allCategories}</option>
-                <option value="appetizers">{text.appetizers}</option>
-                <option value="mains">{text.mains}</option>
-                <option value="desserts">{text.desserts}</option>
-                <option value="drinks">{text.drinks}</option>
+                <option value="stickyRice">{text.stickyRice}</option>
+                <option value="sweetSoups">{text.sweetSoups}</option>
+                <option value="steamedSweets">{text.steamedSweets}</option>
+                <option value="snacks">{text.snacks}</option>
               </select>
             </div>
 

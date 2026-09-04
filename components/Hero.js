@@ -16,11 +16,11 @@ export default function Hero({ totalEntries, language }) {
             </div>
 
             <h1 className="hero-title animate-stagger delay-2">
-              {collection.name} <i>{collection.source}</i>
+              {language === 'kh' ? (collection.nameKm || collection.name) : collection.name} <i>{language === 'kh' ? (collection.sourceKm || collection.source) : collection.source}</i>
             </h1>
 
             <p className="hero-description animate-stagger delay-3">
-              {collection.description}
+              {language === 'kh' ? (collection.descriptionKm || collection.description) : collection.description}
             </p>
 
             <div className="hero-actions animate-stagger delay-4">

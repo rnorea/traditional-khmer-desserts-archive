@@ -15,10 +15,10 @@ export const t = {
 
     searchPlaceholder: "Search archive by ingredient, dish...",
     allCategories: "All Categories",
-    appetizers: "Appetizers",
-    mains: "Main Courses",
-    desserts: "Desserts",
-    drinks: "Traditional Drinks",
+    stickyRice: "Sticky Rice Cakes",
+    sweetSoups: "Sweet Soups",
+    steamedSweets: "Steamed Sweets",
+    snacks: "Bite-sized Snacks",
     sortNameAsc: "Sort: Name (A–Z)",
     sortNameDesc: "Sort: Name (Z–A)",
     dateNewest: "Date: Newest",
@@ -37,7 +37,7 @@ export const t = {
     fermentation: "Fermentation Arts",
     ritual: "Ritual Offerings",
     allRights: "All rights reserved.",
-    
+
     seeDetail: "See Detail",
     prep: "Prep",
     primary: "Primary",
@@ -59,10 +59,10 @@ export const t = {
 
     searchPlaceholder: "ស្វែងរកបណ្ណសារតាមរយៈ គ្រឿងផ្សំ មុខម្ហូប...",
     allCategories: "ប្រភេទទាំងអស់",
-    appetizers: "ម្ហូបសម្រន់",
-    mains: "ម្ហូបចម្បង",
-    desserts: "បង្អែម",
-    drinks: "ភេសជ្ជៈបុរាណ",
+    stickyRice: "នំបាយដំណើប",
+    sweetSoups: "បបរផ្អែម",
+    steamedSweets: "នំចំហុយ",
+    snacks: "នំសម្រន់",
     sortNameAsc: "រៀបតាម: ឈ្មោះ (ក-អ)",
     sortNameDesc: "រៀបតាម: ឈ្មោះ (អ-ក)",
     dateNewest: "កាលបរិច្ឆេទ: ថ្មីបំផុត",

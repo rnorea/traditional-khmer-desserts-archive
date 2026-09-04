@@ -5,7 +5,8 @@ export default function EntryCard({ entry, language }) {
   const text = t[language] || t.en;
 
   const displayName = language === 'kh' ? (entry.nativeName || entry.name) : entry.name;
-  const displayCategory = language === 'kh' ? (entry.categoryKm || entry.category || 'បង្អែម') : (entry.category || 'Desserts');
+  const formatCategory = (cat, fallback) => cat ? (Array.isArray(cat) ? cat.join(", ") : cat) : fallback;
+  const displayCategory = language === 'kh' ? formatCategory(entry.categoryKm || entry.category, 'បង្អែម') : formatCategory(entry.category, 'Desserts');
   const displayDescription = language === 'kh' ? (entry.descriptionKm || entry.description) : entry.description;
   const displayLocation = language === 'kh' ? (entry.locationKm || entry.location) : entry.location;
 
