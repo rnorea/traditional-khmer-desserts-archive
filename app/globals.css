@@ -1056,3 +1056,52 @@ ol.steps-list li {
         grid-template-columns: 1fr;
     }
 }
+
+/* ------------------------------------------------ */
+/* DESSERT DETAIL INTRO ANIMATIONS                  */
+/* ------------------------------------------------ */
+@keyframes detailFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes detailSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.detail-banner-animate {
+  opacity: 0;
+}
+
+.detail-recipe-animate {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.detail-suggestions-animate {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.detail-banner-animate.is-visible {
+  animation: detailFadeIn 800ms var(--ease-editorial, cubic-bezier(0.25, 1, 0.5, 1)) forwards;
+}
+
+.detail-recipe-animate.is-visible {
+  animation: detailSlideUp 700ms var(--ease-editorial, cubic-bezier(0.25, 1, 0.5, 1)) forwards;
+}
+
+.detail-suggestions-animate.is-visible {
+  animation: detailSlideUp 700ms var(--ease-editorial, cubic-bezier(0.25, 1, 0.5, 1)) forwards;
+}

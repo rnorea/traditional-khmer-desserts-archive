@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "../../../../components/Navbar.js";
@@ -15,6 +15,14 @@ export default function DessertDetail() {
   const [dessert, setDessert] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
 
+  const bannerRef = useRef(null);
+  const recipeRef = useRef(null);
+  const suggestionsRef = useRef(null);
+
+  const [bannerVisible, setBannerVisible] = useState(false);
+  const [recipeVisible, setRecipeVisible] = useState(false);
+  const [suggestionsVisible, setSuggestionsVisible] = useState(false);
+
   useEffect(() => {
     if (params?.id) {
       const found = traditionalKhmerDesserts.find(d => d.id.toString() === params.id);
@@ -27,6 +35,29 @@ export default function DessertDetail() {
       }
     }
   }, [params?.id, router, language]);
+
+  useEffect(() => {
+    if (!dessert) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.target === bannerRef.current) setBannerVisible(true);
+            if (entry.target === recipeRef.current) setRecipeVisible(true);
+            if (entry.target === suggestionsRef.current) setSuggestionsVisible(true);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    if (bannerRef.current) observer.observe(bannerRef.current);
+    if (recipeRef.current) observer.observe(recipeRef.current);
+    if (suggestionsRef.current) observer.observe(suggestionsRef.current);
+
+    return () => observer.disconnect();
+  }, [dessert, suggestions.length]);
 
   if (!dessert) return null;
 
@@ -51,7 +82,11 @@ export default function DessertDetail() {
         </div>
 
         <div className="card-sheet">
-          <div className="sheet-banner" style={{ backgroundImage: `url(${imageUrl})` }}>
+          <div
+            ref={bannerRef}
+            className={`sheet-banner detail-banner-animate ${bannerVisible ? "is-visible" : ""}`}
+            style={{ backgroundImage: `url(${imageUrl})` }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <span className="meta-tag-sheet">
                 {displayLocation}
@@ -66,7 +101,10 @@ export default function DessertDetail() {
             </p>
           </div>
 
-          <div className="sheet-grid">
+          <div
+            ref={recipeRef}
+            className={`sheet-grid detail-recipe-animate ${recipeVisible ? "is-visible" : ""}`}
+          >
             <div className="recipe-section recipe-section-left">
               <h4>{language === 'en' ? 'Ingredients' : 'គ្រឿងផ្សំ'}</h4>
               <ul className="ingredients-list">
@@ -92,7 +130,10 @@ export default function DessertDetail() {
         </div>
 
         {suggestions.length > 0 && (
-          <div className="suggestions-wrapper">
+          <div
+            ref={suggestionsRef}
+            className={`suggestions-wrapper detail-suggestions-animate ${suggestionsVisible ? "is-visible" : ""}`}
+          >
             <h3>{language === 'en' ? 'You Might Also Like' : 'បង្អែមផ្សេងទៀតដែលអ្នកអាចចូលចិត្ត'}</h3>
             <div className="suggestions-grid">
               {suggestions.map(sug => (
