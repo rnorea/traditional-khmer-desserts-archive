@@ -9,7 +9,7 @@ export default function Navbar({ language }) {
   const text = t[language] || t.en;
   const pathname = usePathname();
   const router = useRouter();
-  
+
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -33,7 +33,7 @@ export default function Navbar({ language }) {
   const switchLanguage = () => {
     const newLang = language === 'en' ? 'kh' : 'en';
     document.cookie = `NEXT_LOCALE=${newLang}; path=/; max-age=31536000`;
-    
+
     // Replace the language prefix in the URL
     // Handle cases where the URL might just be /en or /kh
     let newPath = pathname;
@@ -42,7 +42,7 @@ export default function Navbar({ language }) {
     } else {
       newPath = `/${newLang}${pathname}`;
     }
-    
+
     router.push(newPath || `/${newLang}`);
     setIsMobileMenuOpen(false); // Close menu after switching language
   };
@@ -50,7 +50,7 @@ export default function Navbar({ language }) {
   return (
     <>
       <div style={{ height: '100px' }} aria-hidden="true" />
-      
+
       <div style={{
         position: 'fixed',
         top: 0,
@@ -65,8 +65,8 @@ export default function Navbar({ language }) {
         <div className="container">
           <nav className="navbar" style={{ padding: (lastScrollY > 20 || isMobileMenuOpen) ? '1rem 0' : '2.2rem 0', transition: 'padding 0.3s ease-in-out' }}>
             <Link href={`/${language}`} className="brand-logo" onClick={() => setIsMobileMenuOpen(false)}>{text.brand}</Link>
-            
-            <button 
+
+            <button
               className="mobile-menu-btn"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-expanded={isMobileMenuOpen}
@@ -87,18 +87,18 @@ export default function Navbar({ language }) {
                 )}
               </svg>
             </button>
-            
+
             <div className={`nav-content ${isMobileMenuOpen ? 'is-open' : ''}`}>
               <div className="nav-links">
                 <Link href={`/${language}`} className={`nav-link ${pathname === `/${language}` ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>{text.home}</Link>
                 <Link href={`/${language}/archive`} className={`nav-link ${pathname.includes('/archive') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>{text.theArchive}</Link>
-                <a href="#" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>{text.culturalOrigins}</a>
+                {/* <a href="#" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>{text.culturalOrigins}</a> */}
                 <a href="#" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>{text.aboutProject}</a>
               </div>
 
               <div className="nav-actions" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                <button 
-                  className="btn-ghost-gold" 
+                <button
+                  className="btn-ghost-gold"
                   onClick={switchLanguage}
                   style={{ padding: '8px 16px', minWidth: '80px' }}
                 >

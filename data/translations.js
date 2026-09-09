@@ -1,6 +1,6 @@
 export const t = {
   en: {
-    brand: "Food Archive",
+    brand: "Khmer Desserts​ Archive",
     home: "Home",
     theArchive: "The Archive",
     culturalOrigins: "Cultural Origins",
@@ -44,7 +44,7 @@ export const t = {
     na: "N/A"
   },
   kh: {
-    brand: "បណ្ណសារម្ហូបអាហារ",
+    brand: "បណ្ណសារបង្អែមខ្មែរ",
     home: "ទំព័រដើម",
     theArchive: "បណ្ណសារ",
     culturalOrigins: "ប្រភពវប្បធម៌",

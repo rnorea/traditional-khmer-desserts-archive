@@ -11,7 +11,7 @@ export const traditionalKhmerDesserts = [
   //   description: "A festive cylindrical sticky rice cake filled with ripe baby bananas, wrapped in layers of banana leaves, and boiled until tender and sweet.",
   //   descriptionKm: "នំអន្សមរាងមូលទ្រវែង រុំដោយស្លឹកចេក ស្នូលចេកណាំវ៉ាទុំ និងស្ងោររហូតដល់ឆ្អិនល្អ មានរសជាតិផ្អែម។",
   //   ingredients: [
-  //     "3 cups glutinous rice (soaked for 4 hours and drained)",
+  //     "3 cups sticky rice (soaked for 4 hours and drained)",
   //     "6 small ripe Khmer baby bananas (Chek Namva)",
   //     "1/2 cup thick coconut cream",
   //     "2 tbsp sugar",
@@ -27,7 +27,7 @@ export const traditionalKhmerDesserts = [
   //     "ស្លឹកចេកស្អាត និងខ្សែចំណង/ខ្សែចេក"
   //   ],
   //   steps: [
-  //     "Toss soaked glutinous rice with coconut cream, sugar, and salt.",
+  //     "Toss soaked sticky rice with coconut cream, sugar, and salt.",
   //     "Lay overlapping banana leaves flat and spread a 1/2-inch layer of rice.",
   //     "Place a whole peeled baby banana lengthwise down the center.",
   //     "Cover with more rice, roll tightly into a cylinder, tuck the ends, and tie firmly with twine at 1-inch intervals.",
@@ -59,7 +59,7 @@ export const traditionalKhmerDesserts = [
   //   description: "The savory-rich counterpart to Nom Ansom Chek, layered with seasoned pork belly, yellow split mung beans, and Kampot black pepper.",
   //   descriptionKm: "នំអន្សមមានរសជាតិប្រៃ ផ្សំដោយសាច់ជ្រូកបីជាន់ សណ្តែកបាយ និងម្រេចកំពត។",
   //   ingredients: [
-  //     "3 cups glutinous rice (soaked and salted)",
+  //     "3 cups sticky rice (soaked and salted)",
   //     "1 cup peeled yellow split mung beans (soaked and steamed)",
   //     "300g pork belly (cut into long strips)",
   //     "2 cloves garlic",
@@ -108,10 +108,10 @@ export const traditionalKhmerDesserts = [
   //   categoryKm: "បង្អែម",
   //   prepTime: "1 Hour",
   //   prepTimeKm: "១ ម៉ោង",
-  //   description: "A pyramid-shaped steamed treat made from glutinous rice flour dough enclosing a sweet filling of grated coconut simmered in caramelized palm sugar.",
+  //   description: "A pyramid-shaped steamed treat made from sticky rice flour dough enclosing a sweet filling of grated coconut simmered in caramelized palm sugar.",
   //   descriptionKm: "នំចំហុយរាងសាជី ធ្វើពីម្សៅអង្ករដំណើប ស្នូលដូងកោសរំងាស់ជាមួយស្ករត្នោត។",
   //   ingredients: [
-  //     "2 cups glutinous rice flour + 1 cup warm water (for dough)",
+  //     "2 cups sticky rice flour + 1 cup warm water (for dough)",
   //     "1.5 cups freshly grated mature coconut",
   //     "3/4 cup Cambodian palm sugar (Skor Thnot)",
   //     "1 tbsp roasted white sesame seeds",
@@ -128,7 +128,7 @@ export const traditionalKhmerDesserts = [
   //   ],
   //   steps: [
   //     "Melt palm sugar with a splash of water, add grated coconut and sesame seeds, and stir over medium heat until caramelized; roll into small balls.",
-  //     "Knead glutinous rice flour and warm water into a smooth, pliable dough.",
+  //     "Knead sticky rice flour and warm water into a smooth, pliable dough.",
   //     "Flatten a ball of dough, insert the coconut filling, and seal into a sphere.",
   //     "Shape a banana leaf into a cone, insert the dough ball, fold bottom flaps to form a 3D pyramid, and steam for 20 to 25 minutes."
   //   ],
@@ -157,7 +157,7 @@ export const traditionalKhmerDesserts = [
   //   description: "A rectangular, flat banana leaf pocket filled with sweet mung bean paste or toasted coconut, steamed until chewy.",
   //   descriptionKm: "នំចំហុយរាងចតុកោណ ស្នូលសណ្តែកបាយផ្អែម ឬដូងលីង មានសាច់ស្វិតឆ្ងាញ់។",
   //   ingredients: [
-  //     "2 cups glutinous rice flour",
+  //     "2 cups sticky rice flour",
   //     "1 cup cooked sweet yellow mung bean paste (blended with sugar and coconut milk)",
   //     "1/2 cup coconut milk",
   //     "Pinch of salt",
@@ -171,7 +171,7 @@ export const traditionalKhmerDesserts = [
   //     "ស្លឹកចេកកាត់ជាចតុកោណ"
   //   ],
   //   steps: [
-  //     "Mix glutinous flour and coconut milk into a soft dough.",
+  //     "Mix sticky flour and coconut milk into a soft dough.",
   //     "Lightly oil the inner side of a banana leaf rectangle.",
   //     "Spread a flat portion of dough, add a spoonful of sweet mung bean paste in the middle, and fold dough over filling.",
   //     "Fold the banana leaf from both sides and tuck the ends under to form a flat rectangular parcel.",
@@ -200,10 +200,10 @@ export const traditionalKhmerDesserts = [
   //   categoryKm: "ម្ហូបសម្រន់",
   //   prepTime: "3.5 Hours",
   //   prepTimeKm: "៣.៥ ម៉ោង",
-  //   description: "A hearty pyramid parcel featuring seasoned glutinous rice packed with salted egg yolks, dried shrimp, marinated pork, and peanuts.",
+  //   description: "A hearty pyramid parcel featuring seasoned sticky rice packed with salted egg yolks, dried shrimp, marinated pork, and peanuts.",
   //   descriptionKm: "នំរាងសាជី ធ្វើពីអង្ករដំណើបលាយជាមួយពងទាប្រៃ បង្គាក្រៀម សាច់ជ្រូក និងសណ្តែកដី។",
   //   ingredients: [
-  //     "2 cups glutinous rice (soaked and sautéed with garlic and five-spice)",
+  //     "2 cups sticky rice (soaked and sautéed with garlic and five-spice)",
   //     "4 salted egg yolks (halved)",
   //     "1/2 cup dried shrimp (soaked)",
   //     "200g braised pork chunks",
@@ -301,7 +301,7 @@ export const traditionalKhmerDesserts = [
   //   description: "A sweet, nutty cylindrical sticky rice cake embedded with tender black-eyed peas and fresh coconut ribbons throughout.",
   //   descriptionKm: "នំអន្សមរាងស៊ីឡាំង មានរសជាតិផ្អែម និងឈ្ងុយសណ្តែកខ្មៅ និងសាច់ដូងកោស។",
   //   ingredients: [
-  //     "3 cups glutinous rice (soaked)",
+  //     "3 cups sticky rice (soaked)",
   //     "1 cup cooked black-eyed peas or black beans",
   //     "1 cup freshly shredded mature coconut",
   //     "3 tbsp sugar",
@@ -343,15 +343,15 @@ export const traditionalKhmerDesserts = [
     id: 8,
     name: "Nom Plae Ai / Nom Bompoun",
     nativeName: "នំផ្លែអាយ ឬនំបំពួន",
-    englishName: "Palm Sugar Glutinous Rice Balls",
+    englishName: "Palm Sugar Sticky Rice Balls",
     category: "Bite-sized Snacks",
     categoryKm: "នំសម្រន់",
     prepTime: "30 Mins",
     prepTimeKm: "៣០ នាទី",
-    description: "Small glutinous rice balls filled with palm sugar cubes and coated in freshly grated mature coconut.",
+    description: "Small sticky rice balls filled with palm sugar cubes and coated in freshly grated mature coconut.",
     descriptionKm: "នំលុញមូលតូចៗធ្វើពីម្សៅអង្ករដំណើប ស្នូលស្ករត្នោត និងរោយដោយដូងកោស។",
     ingredients: [
-      "0.5kg glutinous rice flour (mixed with 150ml water)",
+      "0.5kg sticky rice flour (mixed with 150ml water)",
       "1 tsp salt",
       "Palm sugar (cut into small cubes)",
       "Mature coconut (freshly grated)"
@@ -363,7 +363,7 @@ export const traditionalKhmerDesserts = [
       "ដូងទុំ (សាច់ចាស់កោស)"
     ],
     steps: [
-      "Mix glutinous rice flour with water and salt into a dough.",
+      "Mix sticky rice flour with water and salt into a dough.",
       "Roll dough into thumb-sized balls, insert a small pinky-sized cube of palm sugar inside each, and seal.",
       "Boil water and drop the balls in. When cooked, they will float to the top.",
       "Scoop them out and immediately plunge into cold water.",
@@ -482,13 +482,13 @@ export const traditionalKhmerDesserts = [
     categoryKm: "បបរផ្អែម",
     prepTime: "45 Mins",
     prepTimeKm: "៤៥ នាទី",
-    description: "A comforting warm pudding made of glutinous rice, taro chunks, and coconut milk.",
+    description: "A comforting warm pudding made of sticky rice, taro chunks, and coconut milk.",
     descriptionKm: "បបរផ្អែមធ្វើពីអង្ករដំណើប មើមត្រាវ និងខ្ទិះដូង។",
     ingredients: [
       "Taro root",
       "White sugar",
       "Coconut milk",
-      "100g Glutinous rice",
+      "100g Sticky rice",
       "1 tsp salt"
     ],
     ingredientsKm: [
@@ -499,8 +499,8 @@ export const traditionalKhmerDesserts = [
       "អំបិល ១ ស្លាបព្រាកាហ្វេ"
     ],
     steps: [
-      "Wash the glutinous rice thoroughly. Peel the taro root, wash it, and cut into medium bite-sized chunks.",
-      "Boil water and add the glutinous rice, letting it cook until slightly expanded.",
+      "Wash the sticky rice thoroughly. Peel the taro root, wash it, and cut into medium bite-sized chunks.",
+      "Boil water and add the sticky rice, letting it cook until slightly expanded.",
       "Add the taro chunks and 1 teaspoon of salt.",
       "Finally, add sugar and coconut milk, cooking until everything is tender and well combined."
     ],
@@ -526,10 +526,10 @@ export const traditionalKhmerDesserts = [
     categoryKm: ["នំសម្រន់", "នំបាយតំណើប"],
     prepTime: "1 Hour",
     prepTimeKm: "១ ម៉ោង",
-    description: "Sweet glutinous rice mixed with coconut milk and palm sugar, cooked down until it becomes a sticky, flavorful treat.",
+    description: "Sweet sticky rice mixed with coconut milk and palm sugar, cooked down until it becomes a sticky, flavorful treat.",
     descriptionKm: "នំធ្វើពីបាយដំណើបលាយជាមួយខ្ទិះដូង ស្ករត្នោត និងអំបិល។",
     ingredients: [
-      "1kg Glutinous rice",
+      "1kg Sticky rice",
       "0.5kg Palm sugar",
       "0.5kg Coconut milk",
       "0.5 tbsp salt"
@@ -541,7 +541,7 @@ export const traditionalKhmerDesserts = [
       "អំបិល ០.៥ ស្លាបព្រាបាយ"
     ],
     steps: [
-      "Wash the glutinous rice cleanly, then cook it with water until it becomes fully cooked rice.",
+      "Wash the sticky rice cleanly, then cook it with water until it becomes fully cooked rice.",
       "Mix the coconut milk and salt.",
       "Stir the cooked rice together with the coconut milk mixture and palm sugar.",
       "Continue stirring over heat until the liquid evaporates and it forms a cohesive snack."

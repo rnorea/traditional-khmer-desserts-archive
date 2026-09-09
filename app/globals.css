@@ -124,6 +124,7 @@ select {
   display: flex;
   gap: 2.5rem;
   align-items: center;
+  margin: 0 auto;
 }
 
 .nav-link {
