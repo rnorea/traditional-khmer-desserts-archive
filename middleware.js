@@ -25,8 +25,7 @@ export function middleware(request) {
     const localeCookie = request.cookies.get('NEXT_LOCALE')?.value;
     const locale = locales.includes(localeCookie) ? localeCookie : defaultLocale;
 
-    // e.g. incoming request is /archive
-    // The new URL is now /en/archive
+    // Redirect to the URL with the locale
     return NextResponse.redirect(new URL(`/${locale}${pathname}`, request.url));
   }
 

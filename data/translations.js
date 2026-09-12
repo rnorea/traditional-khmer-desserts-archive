@@ -1,6 +1,6 @@
 export const t = {
   en: {
-    brand: "Khmer Desserts​ Archive",
+    brand: "Khmer Desserts​",
     home: "Home",
     theArchive: "The Archive",
     culturalOrigins: "Cultural Origins",
@@ -26,6 +26,11 @@ export const t = {
     originRegion: "Origin / Region",
     gridView: "Grid View",
     listView: "List View",
+    itemsPerPage: "Items per page",
+    previous: "Previous",
+    next: "Next",
+    page: "Page",
+    of: "of",
 
     navigation: "Navigation",
     regionalMap: "Regional Map",
@@ -41,7 +46,15 @@ export const t = {
     seeDetail: "See Detail",
     prep: "Prep",
     primary: "Primary",
-    na: "N/A"
+    na: "N/A",
+
+    aboutTitle: "About the Project",
+    ourMission: "Our Mission",
+    missionText: "To preserve traditional Khmer desserts and recipes, and to share them with younger generations and the world to try.",
+    ourStory: "The Story",
+    storyText: "Khmer cuisine carries centuries of rich history, yet many traditional dessert recipes remain undocumented and risk being lost over time. This project was born from a desire to digitally archive these culinary treasures, ensuring that the sweet heritage of Cambodia is celebrated and kept alive.",
+    aboutMe: "About Me",
+    aboutMeText: "Curated by ROTH Noreasakpheak as part of the ICT 340 course. I am passionate about leveraging technology to document and preserve the cultural identity embedded in Cambodian food."
   },
   kh: {
     brand: "បណ្ណសារបង្អែមខ្មែរ",
@@ -70,6 +83,11 @@ export const t = {
     originRegion: "ប្រភព / តំបន់",
     gridView: "ទម្រង់ក្រឡា",
     listView: "ទម្រង់បញ្ជី",
+    itemsPerPage: "ចំនួនក្នុងមួយទំព័រ",
+    previous: "មុន",
+    next: "បន្ទាប់",
+    page: "ទំព័រ",
+    of: "នៃ",
 
     navigation: "ការរុករក",
     regionalMap: "ផែនទីតំបន់",
@@ -85,6 +103,14 @@ export const t = {
     seeDetail: "មើលលម្អិត",
     prep: "រៀបចំ",
     primary: "គ្រឿងផ្សំចម្បង",
-    na: "គ្មាន"
+    na: "គ្មាន",
+
+    aboutTitle: "អំពីគម្រោង",
+    ourMission: "បេសកកម្មរបស់យើង",
+    missionText: "ដើម្បីអភិរក្សបង្អែមខ្មែរ និងរូបមន្ត ហើយចែករំលែកវាដល់ក្មេងជំនាន់ក្រោយ ព្រមទាំងពិភពលោកទាំងមូល។",
+    ourStory: "សាច់រឿង",
+    storyText: "បង្អែមខ្មែរមានប្រវត្តិដ៏សម្បូរបែបតាំងពីរាប់រយឆ្នាំមកហើយ ប៉ុន្តែរូបមន្តបង្អែមជាច្រើននៅតែមិនមានការកត់ត្រា ហើយប្រឈមនឹងការបាត់បង់ទៅតាមពេលវេលា។ គម្រោងនេះកើតចេញពីបំណងប្រាថ្នាក្នុងការចងក្រងកេរដំណែលទាំងនេះជាឯកសារឌីជីថល ដើម្បីធានាថាកេរដំណែលដ៏ផ្អែមល្ហែមរបស់កម្ពុជានឹងត្រូវបានប្រារព្ធ និងរក្សាទុកជារៀងរហូត។",
+    aboutMe: "អំពីខ្ញុំ",
+    aboutMeText: "រៀបចំដោយ ROTH Noreasakpheak ជាផ្នែកមួយនៃថ្នាក់ ICT 340។ ខ្ញុំមានចំណង់ចំណូលចិត្តក្នុងការប្រើប្រាស់បច្ចេកវិទ្យាដើម្បីចងក្រង និងអភិរក្សអត្តសញ្ញាណវប្បធម៌ដែលបង្កប់នៅក្នុងម្ហូបអាហារកម្ពុជា។"
   }
 };

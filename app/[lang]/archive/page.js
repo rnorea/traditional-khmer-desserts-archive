@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Navbar from "../../../components/Navbar.js";
 import ArchiveControls from "../../../components/ArchiveControls.js";
@@ -9,6 +9,7 @@ import ArchiveListItem from "../../../components/ArchiveListItem.js";
 import Footer from "../../../components/Footer.js";
 import NotFoundCard from "../../../components/NotFoundCard.js";
 import { traditionalKhmerDesserts } from "../../../data/entries.js";
+import { t } from "../../../data/translations.js";
 
 const cleanText = (str) => {
   if (!str) return "";
@@ -27,6 +28,14 @@ export default function ArchivePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [sortType, setSortType] = useState("name-asc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
+
+  const text = t[language] || t.en;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, filterType, sortType, itemsPerPage]);
 
   const suggestions = useMemo(() => {
     let result = [...traditionalKhmerDesserts];
@@ -137,6 +146,10 @@ export default function ArchivePage() {
     return result;
   }, [searchQuery, filterType, sortType]);
 
+  const totalPages = Math.ceil(filteredAndSortedEntries.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedEntries = filteredAndSortedEntries.slice(startIndex, startIndex + itemsPerPage);
+
   return (
     <>
       <Navbar language={language} />
@@ -155,23 +168,51 @@ export default function ArchivePage() {
           onSortChange={setSortType}
           viewMode={viewMode}
           onViewModeChange={setViewMode}
+          itemsPerPage={itemsPerPage}
+          onItemsPerPageChange={setItemsPerPage}
           language={language}
         />
 
-        {filteredAndSortedEntries.length > 0 ? (
-          viewMode === "grid" ? (
-            <div className="archive-grid">
-              {filteredAndSortedEntries.map(entry => (
-                <EntryCard key={entry.id} entry={entry} language={language} />
-              ))}
-            </div>
-          ) : (
-            <div className="archive-list" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {filteredAndSortedEntries.map(entry => (
-                <ArchiveListItem key={entry.id} entry={entry} language={language} />
-              ))}
-            </div>
-          )
+        {paginatedEntries.length > 0 ? (
+          <>
+            {viewMode === "grid" ? (
+              <div className="archive-grid">
+                {paginatedEntries.map(entry => (
+                  <EntryCard key={entry.id} entry={entry} language={language} />
+                ))}
+              </div>
+            ) : (
+              <div className="archive-list" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {paginatedEntries.map(entry => (
+                  <ArchiveListItem key={entry.id} entry={entry} language={language} />
+                ))}
+              </div>
+            )}
+            
+            {totalPages > 1 && (
+              <div className="pagination" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '40px' }}>
+                <button 
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  className="view-btn"
+                  style={{ padding: '8px 16px', opacity: currentPage === 1 ? 0.5 : 1, cursor: currentPage === 1 ? 'not-allowed' : 'pointer', width: 'auto' }}
+                >
+                  {text.previous}
+                </button>
+                <span style={{ color: 'var(--text-secondary)' }}>
+                  {text.page} {currentPage} {text.of} {totalPages}
+                </span>
+                <button 
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  className="view-btn"
+                  style={{ padding: '8px 16px', opacity: currentPage === totalPages ? 0.5 : 1, cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', width: 'auto' }}
+                >
+                  {text.next}
+                </button>
+              </div>
+            )}
+          </>
         ) : (
           <NotFoundCard searchQuery={searchQuery} suggestions={suggestions} language={language} />
         )}

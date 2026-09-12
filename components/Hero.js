@@ -34,7 +34,7 @@ export default function Hero({ totalEntries, language }) {
 
           <div className="hero-media hero-media-animate">
             <div className="hero-image-wrapper">
-              <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=1200" alt="Traditional Heritage Ingredients" />
+              <img src="/images/trees.png" alt="Khmer Desserts Archive" />
             </div>
 
             <div className="hero-stamp">

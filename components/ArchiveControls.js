@@ -9,6 +9,8 @@ export default function ArchiveControls({
   onSortChange,
   viewMode,
   onViewModeChange,
+  itemsPerPage,
+  onItemsPerPageChange,
   language
 }) {
   const text = t[language] || t.en;
@@ -85,6 +87,23 @@ export default function ArchiveControls({
         </div>
 
         <div className="controls-right">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
+              {text.itemsPerPage}:
+            </span>
+            <div className="select-custom" style={{ minWidth: '70px' }}>
+              <select id="itemsPerPage" value={itemsPerPage} onChange={(e) => onItemsPerPageChange(Number(e.target.value))}>
+                <option value={4}>4</option>
+                <option value={8}>8</option>
+                <option value={16}>16</option>
+                <option value={32}>32</option>
+                <option value={64}>64</option>
+              </select>
+            </div>
+          </div>
+          
+          <div style={{ width: '1px', height: '24px', backgroundColor: 'var(--border-subtle)', margin: '0 8px' }}></div>
+
           <button 
             className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`} 
             onClick={() => onViewModeChange('grid')}

@@ -9,6 +9,7 @@ export default function ArchiveListItem({ entry, language }) {
   const displayCategory = language === 'kh' ? formatCategory(entry.categoryKm || entry.category, 'បង្អែម') : formatCategory(entry.category, 'Desserts');
   const displayDescription = language === 'kh' ? (entry.descriptionKm || entry.description) : entry.description;
   const displayLocation = language === 'kh' ? (entry.locationKm || entry.location) : entry.location;
+  const displaySource = entry.source || (language === 'kh' ? 'មិនមានប្រភព' : 'Unknown');
   const displayPrepTime = language === 'kh' ? (entry.prepTimeKm || entry.prepTime || text.na) : (entry.prepTime || text.na);
   const displayPrimaryIng = language === 'kh' ? (entry.ingredientsKm?.[0] || entry.ingredients?.[0]) : entry.ingredients?.[0];
 
@@ -26,7 +27,7 @@ export default function ArchiveListItem({ entry, language }) {
             <h3 className="list-title">{displayName}</h3>
             <span className="list-badge">{displayCategory}</span>
           </div>
-          <span className="list-origin-tag">{displayLocation}</span>
+          <span className="list-origin-tag">{displaySource} • {displayLocation}</span>
         </div>
         <p className="list-description">
           {displayDescription}

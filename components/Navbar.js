@@ -32,18 +32,22 @@ export default function Navbar({ language }) {
 
   const switchLanguage = () => {
     const newLang = language === 'en' ? 'kh' : 'en';
+    
+    // Set cookie for middleware
     document.cookie = `NEXT_LOCALE=${newLang}; path=/; max-age=31536000`;
+    // Set local storage as user requested
+    localStorage.setItem('preferredLanguage', newLang);
 
-    // Replace the language prefix in the URL
-    // Handle cases where the URL might just be /en or /kh
     let newPath = pathname;
     if (pathname.startsWith(`/${language}`)) {
       newPath = pathname.replace(`/${language}`, `/${newLang}`);
+    } else if (pathname === '/') {
+      newPath = `/${newLang}`;
     } else {
       newPath = `/${newLang}${pathname}`;
     }
 
-    router.push(newPath || `/${newLang}`);
+    router.push(newPath);
     setIsMobileMenuOpen(false); // Close menu after switching language
   };
 
@@ -93,7 +97,7 @@ export default function Navbar({ language }) {
                 <Link href={`/${language}`} className={`nav-link ${pathname === `/${language}` ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>{text.home}</Link>
                 <Link href={`/${language}/archive`} className={`nav-link ${pathname.includes('/archive') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>{text.theArchive}</Link>
                 {/* <a href="#" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>{text.culturalOrigins}</a> */}
-                <a href="#" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>{text.aboutProject}</a>
+                <Link href={`/${language}/about`} className={`nav-link ${pathname.includes('/about') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>{text.aboutProject}</Link>
               </div>
 
               <div className="nav-actions" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>

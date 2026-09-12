@@ -12,6 +12,13 @@ export default function DessertDetail() {
   const params = useParams();
   const router = useRouter();
   const [language, setLanguage] = useState("en");
+
+  useEffect(() => {
+    const savedLang = localStorage.getItem("preferredLanguage");
+    if (savedLang) {
+      setLanguage(savedLang);
+    }
+  }, []);
   const [dessert, setDessert] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
 
@@ -63,12 +70,12 @@ export default function DessertDetail() {
 
   if (!dessert) return null; // or a loading spinner
 
-  const displayName = language === 'km' ? (dessert.nativeName || dessert.name) : dessert.name;
-  const displayCategory = language === 'km' ? (dessert.categoryKm || dessert.category || 'បង្អែម') : (dessert.category || 'Desserts');
-  const displayLocation = language === 'km' ? (dessert.locationKm || dessert.location) : dessert.location;
-  const displayDescription = language === 'km' ? (dessert.descriptionKm || dessert.description) : dessert.description;
-  const displayIngredients = language === 'km' ? (dessert.ingredientsKm || dessert.ingredients) : dessert.ingredients;
-  const displaySteps = language === 'km' ? (dessert.stepsKm || dessert.steps) : dessert.steps;
+  const displayName = language === 'kh' ? (dessert.nativeName || dessert.name) : dessert.name;
+  const displayCategory = language === 'kh' ? (dessert.categoryKm || dessert.category || 'បង្អែម') : (dessert.category || 'Desserts');
+  const displayLocation = language === 'kh' ? (dessert.locationKm || dessert.location) : dessert.location;
+  const displayDescription = language === 'kh' ? (dessert.descriptionKm || dessert.description) : dessert.description;
+  const displayIngredients = language === 'kh' ? (dessert.ingredientsKm || dessert.ingredients) : dessert.ingredients;
+  const displaySteps = language === 'kh' ? (dessert.stepsKm || dessert.steps) : dessert.steps;
   const imageUrl = dessert.images?.[0] || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=1200";
 
   return (

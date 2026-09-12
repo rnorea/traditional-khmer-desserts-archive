@@ -9,6 +9,7 @@ export default function EntryCard({ entry, language }) {
   const displayCategory = language === 'kh' ? formatCategory(entry.categoryKm || entry.category, 'បង្អែម') : formatCategory(entry.category, 'Desserts');
   const displayDescription = language === 'kh' ? (entry.descriptionKm || entry.description) : entry.description;
   const displayLocation = language === 'kh' ? (entry.locationKm || entry.location) : entry.location;
+  const displaySource = entry.source || (language === 'kh' ? 'មិនមានប្រភព' : 'Unknown');
 
   return (
     <Link href={`/archive/${entry.id}`} className="archive-card" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -23,7 +24,7 @@ export default function EntryCard({ entry, language }) {
         <h3 className="card-title">{displayName}</h3>
         <p className="card-description">{displayDescription}</p>
         <div className="card-footer">
-          <span className="card-origin">{displayLocation}</span>
+          <span className="card-origin">{displaySource} • {displayLocation}</span>
           <span className="card-action-btn">
             <span>{text.seeDetail}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
