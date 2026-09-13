@@ -27,7 +27,10 @@ export default function ArchiveListItem({ entry, language }) {
             <h3 className="list-title">{displayName}</h3>
             <span className="list-badge">{displayCategory}</span>
           </div>
-          <span className="list-origin-tag">{displaySource} • {displayLocation}</span>
+          <div className="list-origin-tag" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px' }}>
+            <span>{displaySource}</span>
+            <span style={{ fontSize: '0.9em', opacity: 0.85 }}>{displayLocation}</span>
+          </div>
         </div>
         <p className="list-description">
           {displayDescription}
