@@ -9,7 +9,7 @@ export default function EntryCard({ entry, language }) {
   const displayCategory = language === 'kh' ? formatCategory(entry.categoryKm || entry.category, 'បង្អែម') : formatCategory(entry.category, 'Desserts');
   const displayDescription = language === 'kh' ? (entry.descriptionKm || entry.description) : entry.description;
   const displayLocation = language === 'kh' ? (entry.locationKm || entry.location) : entry.location;
-  const displaySource = entry.source || (language === 'kh' ? 'មិនមានប្រភព' : 'Unknown');
+  const displaySource = language === 'kh' ? (entry.sourceKm || entry.source || 'មិនមានប្រភព') : (entry.source || 'Unknown');
 
   return (
     <Link href={`/archive/${entry.id}`} className="archive-card" style={{ textDecoration: 'none', color: 'inherit' }}>

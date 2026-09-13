@@ -17,6 +17,7 @@ const collection = {
 
   // Who is building this archive? Your name, as you want it shown.
   curator: "ROTH Noreasakpheak",
+  curatorKm: "សភៈ",
 
   // Where does your knowledge come from? A person, a place, a community.
   source: "To be gathered",

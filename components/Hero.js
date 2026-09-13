@@ -26,7 +26,7 @@ export default function Hero({ totalEntries, language }) {
             <div className="hero-actions animate-stagger delay-4">
               <button className="btn-capsule-dark">{text.learnAbout}</button>
               <button className="btn-ghost-gold">
-                <span>{text.curatedBy} {collection.curator}</span>
+                <span>{text.curatedBy} {language === 'kh' ? (collection.curatorKm || collection.curator) : collection.curator}</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </button>
             </div>
