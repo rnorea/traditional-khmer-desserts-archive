@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { t } from '../data/translations.js';
+import { createClient } from '../utils/supabase/client.js';
 
 export default function Navbar({ language }) {
   const text = t[language] || t.en;
@@ -13,6 +14,20 @@ export default function Navbar({ language }) {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,6 +64,12 @@ export default function Navbar({ language }) {
 
     router.push(newPath);
     setIsMobileMenuOpen(false); // Close menu after switching language
+  };
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.refresh();
   };
 
   return (
@@ -96,6 +117,11 @@ export default function Navbar({ language }) {
               <div className="nav-links">
                 <Link href={`/${language}`} className={`nav-link ${pathname === `/${language}` ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>{text.home}</Link>
                 <Link href={`/${language}/archive`} className={`nav-link ${pathname.includes('/archive') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>{text.theArchive}</Link>
+                {/* user && (
+                  <Link href={`/${language}/add-entry`} className={`nav-link ${pathname.includes('/add-entry') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+                    {language === 'en' ? 'Add Entry' : 'បន្ថែមឯកសារ'}
+                  </Link>
+                ) */}
                 {/* <a href="#" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>{text.culturalOrigins}</a> */}
                 <Link href={`/${language}/about`} className={`nav-link ${pathname.includes('/about') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>{text.aboutProject}</Link>
               </div>
@@ -108,10 +134,28 @@ export default function Navbar({ language }) {
                 >
                   {language === 'en' ? 'ខ្មែរ' : 'EN'}
                 </button>
-                <Link href={`/${language}/archive`} className="btn-cta-primary" style={{ textDecoration: 'none' }} onClick={() => setIsMobileMenuOpen(false)}>
-                  <span>{text.exploreArchive}</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </Link>
+                {user ? (
+                  <>
+                    <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', display: 'none' }}>{user.email}</span>
+                    <Link href={`/${language}/profile`} style={{ textDecoration: 'none' }} onClick={() => setIsMobileMenuOpen(false)}>
+                      <span className="user-email" style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', cursor: 'pointer' }}>
+                        {user.user_metadata?.full_name || user.user_metadata?.username || (user.email.length > 20 ? user.email.substring(0, 17) + '...' : user.email)}
+                      </span>
+                    </Link>
+                    <button onClick={handleLogout} className="btn-ghost-gold" style={{ padding: '8px 16px' }}>
+                      {language === 'en' ? 'Logout' : 'ចាកចេញ'}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link href={`/${language}/login`} className="btn-ghost-gold" style={{ padding: '8px 16px', textDecoration: 'none' }} onClick={() => setIsMobileMenuOpen(false)}>
+                      {language === 'en' ? 'Log In' : 'ចូល'}
+                    </Link>
+                    <Link href={`/${language}/signup`} className="btn-cta-primary" style={{ textDecoration: 'none' }} onClick={() => setIsMobileMenuOpen(false)}>
+                      {language === 'en' ? 'Sign Up' : 'ចុះឈ្មោះ'}
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </nav>

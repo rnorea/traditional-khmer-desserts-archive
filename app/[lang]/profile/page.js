@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Navbar from '../../../components/Navbar.js';
 import Footer from '../../../components/Footer.js';
 import { updateProfile, updateEmail, updatePassword } from '../../actions/profile.js';
-import { deleteEntry } from '../../actions/entries.js';
+// import { deleteEntry } from '../../actions/entries.js';
 import { createClient } from '../../../utils/supabase/client.js';
 
 export default function ProfilePage() {
@@ -20,7 +20,7 @@ export default function ProfilePage() {
   
   const [userMetadata, setUserMetadata] = useState(null);
   const [userEmail, setUserEmail] = useState('');
-  const [entries, setEntries] = useState([]);
+  // const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [editingEmail, setEditingEmail] = useState(false);
@@ -35,15 +35,14 @@ export default function ProfilePage() {
       } else {
         setUserMetadata(user.user_metadata);
         setUserEmail(user.email);
-        
-        supabase
+        /* supabase
           .from('entries')
           .select('*')
           .eq('contributor_id', user.id)
           .order('created_at', { ascending: false })
           .then(({ data }) => {
             if (data) setEntries(data);
-          });
+          }); */
       }
       setLoading(false);
     });
@@ -71,7 +70,7 @@ export default function ProfilePage() {
     if (passwordState?.success) setEditingPassword(false);
   }, [passwordState]);
 
-  const handleDeleteEntry = async (id) => {
+/*  const handleDeleteEntry = async (id) => {
     const confirmMessage = language === 'en' ? 'Are you sure you want to delete this entry?' : 'តើអ្នកប្រាកដជាចង់លុបឯកសារនេះទេ?';
     if (confirm(confirmMessage)) {
       const res = await deleteEntry(id);
@@ -81,7 +80,7 @@ export default function ProfilePage() {
         alert(res.error);
       }
     }
-  };
+  }; */
 
   if (loading) {
     return (
@@ -238,6 +237,7 @@ export default function ProfilePage() {
         </div>
 
         {/* My Entries Section */}
+        {/*
         <div style={containerStyle}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
             <h2 style={{ fontSize: '1.5rem', color: 'var(--green-primary)', margin: 0 }}>
@@ -277,6 +277,7 @@ export default function ProfilePage() {
             </div>
           )}
         </div>
+        */}
 
       </main>
 
