@@ -8,8 +8,8 @@ import EntryCard from "../../../components/EntryCard.js";
 import ArchiveListItem from "../../../components/ArchiveListItem.js";
 import Footer from "../../../components/Footer.js";
 import NotFoundCard from "../../../components/NotFoundCard.js";
-import { traditionalKhmerDesserts } from "../../../data/entries.js";
 import { t } from "../../../data/translations.js";
+import { createClient } from "../../../utils/supabase/client.js";
 
 const cleanText = (str) => {
   if (!str) return "";
@@ -24,6 +24,9 @@ export default function ArchivePage() {
   const params = useParams();
   const language = params?.lang || "en";
 
+  const [dbEntries, setDbEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const [viewMode, setViewMode] = useState("grid");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("all");
@@ -34,11 +37,26 @@ export default function ArchivePage() {
   const text = t[language] || t.en;
 
   useEffect(() => {
+    const fetchEntries = async () => {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from('entries')
+        .select('*, profiles(full_name)')
+        .eq('status', 'published')
+        .order('created_at', { ascending: false });
+      
+      if (data) setDbEntries(data);
+      setLoading(false);
+    };
+    fetchEntries();
+  }, []);
+
+  useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, filterType, sortType, itemsPerPage]);
 
   const suggestions = useMemo(() => {
-    let result = [...traditionalKhmerDesserts];
+    let result = [...dbEntries];
     const query = cleanText(searchQuery);
     if (!query) return result.slice(0, 4);
 
@@ -47,13 +65,12 @@ export default function ArchivePage() {
 
     const atLeastOne = result.filter(entry => {
        const entryText = [
-         cleanText(entry.name),
-         entry.nativeName ? cleanText(entry.nativeName) : "",
-         entry.englishName ? cleanText(entry.englishName) : "",
-         cleanText(entry.description),
-         entry.descriptionKm ? cleanText(entry.descriptionKm) : "",
-         ...entry.ingredients.map(cleanText),
-         ...(entry.ingredientsKm ? entry.ingredientsKm.map(cleanText) : [])
+         cleanText(entry.title_en),
+         cleanText(entry.title_kh),
+         cleanText(entry.description_en),
+         cleanText(entry.description_kh),
+         cleanText(entry.ingredients_en),
+         cleanText(entry.ingredients_kh)
        ].join(" ");
        return words.some(word => entryText.includes(word));
     });
@@ -66,36 +83,23 @@ export default function ArchivePage() {
       return atLeastOne;
     }
     return result.slice(0, 4);
-  }, [searchQuery]);
+  }, [searchQuery, dbEntries]);
 
   const filteredAndSortedEntries = useMemo(() => {
-    let result = [...traditionalKhmerDesserts];
-
-    if (filterType !== "all") {
-      result = result.filter(entry => {
-        const cat = Array.isArray(entry.category) 
-          ? entry.category.map(c => c.toLowerCase()).join(" ") 
-          : (entry.category?.toLowerCase() || "");
-        if (filterType === "stickyRice") return cat.includes("sticky rice");
-        if (filterType === "sweetSoups") return cat.includes("soup");
-        if (filterType === "steamedSweets") return cat.includes("steamed");
-        if (filterType === "snacks") return cat.includes("snack");
-        return true;
-      });
-    }
+    let result = [...dbEntries];
 
     const query = cleanText(searchQuery);
 
     if (query) {
-      const exactResult = result.filter(entry => 
-        cleanText(entry.name).includes(query) || 
-        (entry.nativeName && cleanText(entry.nativeName).includes(query)) ||
-        (entry.englishName && cleanText(entry.englishName).includes(query)) ||
-        cleanText(entry.description).includes(query) ||
-        (entry.descriptionKm && cleanText(entry.descriptionKm).includes(query)) ||
-        entry.ingredients.some(ing => cleanText(ing).includes(query)) ||
-        (entry.ingredientsKm && entry.ingredientsKm.some(ing => cleanText(ing).includes(query)))
-      );
+      const exactResult = result.filter(entry => {
+        const titleEnMatch = entry.title_en && cleanText(entry.title_en).includes(query);
+        const titleKhMatch = entry.title_kh && cleanText(entry.title_kh).includes(query);
+        const descEnMatch = entry.description_en && cleanText(entry.description_en).includes(query);
+        const descKhMatch = entry.description_kh && cleanText(entry.description_kh).includes(query);
+        const ingEnMatch = entry.ingredients_en && cleanText(entry.ingredients_en).includes(query);
+        const ingKhMatch = entry.ingredients_kh && cleanText(entry.ingredients_kh).includes(query);
+        return titleEnMatch || titleKhMatch || descEnMatch || descKhMatch || ingEnMatch || ingKhMatch;
+      });
 
       if (exactResult.length > 0) {
         result = exactResult;
@@ -104,13 +108,12 @@ export default function ArchivePage() {
         if (words.length > 1) {
           const partialResult = result.filter(entry => {
             const entryText = [
-              cleanText(entry.name),
-              entry.nativeName ? cleanText(entry.nativeName) : "",
-              entry.englishName ? cleanText(entry.englishName) : "",
-              cleanText(entry.description),
-              entry.descriptionKm ? cleanText(entry.descriptionKm) : "",
-              ...entry.ingredients.map(cleanText),
-              ...(entry.ingredientsKm ? entry.ingredientsKm.map(cleanText) : [])
+              cleanText(entry.title_en),
+              cleanText(entry.title_kh),
+              cleanText(entry.description_en),
+              cleanText(entry.description_kh),
+              cleanText(entry.ingredients_en),
+              cleanText(entry.ingredients_kh)
             ].join(" ");
             return words.every(word => entryText.includes(word));
           });
@@ -129,26 +132,38 @@ export default function ArchivePage() {
     result.sort((a, b) => {
       switch (sortType) {
         case "name-asc":
-          return a.name.localeCompare(b.name);
+          return (a.title_en || "").localeCompare(b.title_en || "");
         case "name-desc":
-          return b.name.localeCompare(a.name);
+          return (b.title_en || "").localeCompare(a.title_en || "");
         case "date-new":
-          return b.id - a.id;
+          return new Date(b.created_at) - new Date(a.created_at);
         case "date-old":
-          return a.id - b.id;
+          return new Date(a.created_at) - new Date(b.created_at);
         case "region":
-          return (a.location || "").localeCompare(b.location || "");
+          return new Date(b.created_at) - new Date(a.created_at); // region removed, sort by date instead
         default:
           return 0;
       }
     });
 
     return result;
-  }, [searchQuery, filterType, sortType]);
+  }, [searchQuery, filterType, sortType, dbEntries]);
 
   const totalPages = Math.ceil(filteredAndSortedEntries.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedEntries = filteredAndSortedEntries.slice(startIndex, startIndex + itemsPerPage);
+
+  if (loading) {
+    return (
+      <>
+        <Navbar language={language} />
+        <main className="container" id="archive" style={{ paddingTop: '80px', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <p>{language === 'en' ? 'Loading Archive...' : 'កំពុងផ្ទុកបណ្ណសារ...'}</p>
+        </main>
+        <Footer language={language} />
+      </>
+    );
+  }
 
   return (
     <>

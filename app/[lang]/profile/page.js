@@ -236,48 +236,7 @@ export default function ProfilePage() {
           {!editingProfile && profileState?.success && <div style={{...successStyle, marginTop: '1rem'}}>{profileState.success}</div>}
         </div>
 
-        {/* My Entries Section */}
-        {/*
-        <div style={containerStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <h2 style={{ fontSize: '1.5rem', color: 'var(--green-primary)', margin: 0 }}>
-              {language === 'en' ? 'My Entries' : 'ឯកសាររបស់ខ្ញុំ'}
-            </h2>
-            <Link href={`/${language}/add-entry`} className="btn-cta-primary" style={{ padding: '0.5rem 1rem', textDecoration: 'none' }}>
-              {language === 'en' ? 'Add New' : 'បន្ថែមថ្មី'}
-            </Link>
-          </div>
 
-          {entries.length === 0 ? (
-            <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '2rem 0' }}>
-              {language === 'en' ? "You haven't added any entries yet." : 'អ្នកមិនទាន់បានបន្ថែមឯកសារណាមួយនៅឡើយទេ។'}
-            </p>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {entries.map(entry => (
-                <div key={entry.id} style={{ border: '1px solid var(--border-subtle)', borderRadius: '8px', padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div>
-                    <h3 style={{ margin: '0 0 0.25rem 0', fontSize: '1.1rem', color: '#333' }}>
-                      {language === 'en' ? entry.title_en : entry.title_km}
-                    </h3>
-                    <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                      {new Date(entry.created_at).toLocaleDateString()} &middot; {entry.status}
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <Link href={`/${language}/edit-entry/${entry.id}`} className="btn-ghost-gold" style={{ padding: '0.5rem 1rem', textDecoration: 'none' }}>
-                      {language === 'en' ? 'Edit' : 'កែប្រែ'}
-                    </Link>
-                    <button onClick={() => handleDeleteEntry(entry.id)} className="btn-ghost-gold" style={{ padding: '0.5rem 1rem', color: '#d32f2f' }}>
-                      {language === 'en' ? 'Delete' : 'លុប'}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        */}
 
       </main>
 

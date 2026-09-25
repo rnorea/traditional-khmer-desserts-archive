@@ -6,7 +6,7 @@ import Link from "next/link";
 import Navbar from "../../../../components/Navbar.js";
 import Footer from "../../../../components/Footer.js";
 import EntryCard from "../../../../components/EntryCard.js";
-import { traditionalKhmerDesserts } from "../../../../data/entries.js";
+import { createClient } from "../../../../utils/supabase/client.js";
 
 export default function DessertDetail() {
   const params = useParams();
@@ -14,6 +14,7 @@ export default function DessertDetail() {
   const language = params?.lang || "en";
   const [dessert, setDessert] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const bannerRef = useRef(null);
   const recipeRef = useRef(null);
@@ -24,16 +25,40 @@ export default function DessertDetail() {
   const [suggestionsVisible, setSuggestionsVisible] = useState(false);
 
   useEffect(() => {
-    if (params?.id) {
-      const found = traditionalKhmerDesserts.find(d => d.id.toString() === params.id);
-      if (found) {
-        setDessert(found);
-        const others = traditionalKhmerDesserts.filter(d => d.id !== found.id);
-        setSuggestions(others.slice(0, 3));
-      } else {
-        router.push(`/${language}/archive`);
+    const fetchData = async () => {
+      if (params?.id) {
+        const supabase = createClient();
+        
+        // Fetch the specific dessert
+        const { data: found } = await supabase
+          .from('entries')
+          .select('*, profiles(full_name)')
+          .eq('id', params.id)
+          .eq('status', 'published')
+          .single();
+          
+        if (found) {
+          setDessert(found);
+          
+          // Fetch 3 other random desserts for suggestions
+          const { data: others } = await supabase
+            .from('entries')
+            .select('*, profiles(full_name)')
+            .eq('status', 'published')
+            .neq('id', found.id)
+            .limit(3);
+            
+          if (others) {
+            setSuggestions(others);
+          }
+        } else {
+          router.push(`/${language}/archive`);
+        }
       }
-    }
+      setLoading(false);
+    };
+    
+    fetchData();
   }, [params?.id, router, language]);
 
   useEffect(() => {
@@ -59,15 +84,32 @@ export default function DessertDetail() {
     return () => observer.disconnect();
   }, [dessert, suggestions.length]);
 
+  if (loading) {
+    return (
+      <>
+        <Navbar language={language} />
+        <main className="container" style={{ paddingTop: '100px', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <p>{language === 'en' ? 'Loading...' : 'កំពុងផ្ទុក...'}</p>
+        </main>
+        <Footer language={language} />
+      </>
+    );
+  }
+
   if (!dessert) return null;
 
-  const displayName = language === 'kh' ? (dessert.nativeName || dessert.name) : dessert.name;
-  const displayCategory = language === 'kh' ? (dessert.categoryKm || dessert.category || 'បង្អែម') : (dessert.category || 'Desserts');
-  const displayLocation = language === 'kh' ? (dessert.locationKm || dessert.location) : dessert.location;
-  const displayDescription = language === 'kh' ? (dessert.descriptionKm || dessert.description) : dessert.description;
-  const displayIngredients = language === 'kh' ? (dessert.ingredientsKm || dessert.ingredients) : dessert.ingredients;
-  const displaySteps = language === 'kh' ? (dessert.stepsKm || dessert.steps) : dessert.steps;
-  const imageUrl = dessert.images?.[0] || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=1200";
+  const displayName = language === 'kh' ? (dessert.title_kh || dessert.title_en) : dessert.title_en;
+  const displayCategory = language === 'kh' ? 'បង្អែម' : 'Desserts';
+  const displayLocation = '';
+  const displayDescription = language === 'kh' ? (dessert.description_kh || dessert.description_en) : dessert.description_en;
+  
+  const rawIngredients = language === 'kh' ? (dessert.ingredients_kh || dessert.ingredients_en) : dessert.ingredients_en;
+  const displayIngredients = rawIngredients ? rawIngredients.split('\n').filter(Boolean) : [];
+  
+  const rawSteps = language === 'kh' ? (dessert.instructions_kh || dessert.instructions_en) : dessert.instructions_en;
+  const displaySteps = rawSteps ? rawSteps.split('\n').filter(Boolean) : [];
+  
+  const imageUrl = dessert.image_url || "/images/dessert_placeholder.jpg";
 
   return (
     <>
@@ -89,7 +131,7 @@ export default function DessertDetail() {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <span className="meta-tag-sheet">
-                {displayLocation}
+                {dessert.profiles?.full_name || (language === 'kh' ? 'មិនមានអ្នកនិពន្ធ' : 'Unknown Author')}
               </span>
               <span style={{ fontSize: '0.85rem', opacity: 0.9, fontWeight: 500, textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>
                 {displayCategory}

@@ -4,19 +4,19 @@ import { t } from '../data/translations.js';
 export default function EntryCard({ entry, language }) {
   const text = t[language] || t.en;
 
-  const displayName = language === 'kh' ? (entry.nativeName || entry.name) : entry.name;
-  const formatCategory = (cat, fallback) => cat ? (Array.isArray(cat) ? cat.join(", ") : cat) : fallback;
-  const displayCategory = language === 'kh' ? formatCategory(entry.categoryKm || entry.category, 'បង្អែម') : formatCategory(entry.category, 'Desserts');
-  const displayDescription = language === 'kh' ? (entry.descriptionKm || entry.description) : entry.description;
-  const displayLocation = language === 'kh' ? (entry.locationKm || entry.location) : entry.location;
-  const displaySource = language === 'kh' ? (entry.sourceKm || entry.source || 'មិនមានប្រភព') : (entry.source || 'Unknown');
+  const displayName = language === 'kh' ? (entry.title_kh || entry.title_en) : entry.title_en;
+  // Fallback to empty string since categories aren't in the db anymore
+  const displayCategory = language === 'kh' ? 'បង្អែម' : 'Desserts'; 
+  const displayDescription = language === 'kh' ? (entry.description_kh || entry.description_en) : entry.description_en;
+  const displayLocation = ''; // Removed from schema
+  const authorName = entry.profiles?.full_name || (language === 'kh' ? 'មិនមានអ្នកនិពន្ធ' : 'Unknown Author');
 
   return (
     <Link href={`/archive/${entry.id}`} className="archive-card" style={{ textDecoration: 'none', color: 'inherit' }}>
       <div className="card-image-wrap">
         <span className="card-tag">{displayCategory}</span>
         <img
-          src={entry.images?.[0] || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600"}
+          src={entry.image_url || "/images/dessert_placeholder.jpg"}
           alt={displayName}
         />
       </div>
@@ -25,8 +25,8 @@ export default function EntryCard({ entry, language }) {
         <p className="card-description">{displayDescription}</p>
         <div className="card-footer">
           <div className="card-origin" style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <span>{displaySource}</span>
-            <span style={{ fontSize: '0.9em', opacity: 0.85 }}>{displayLocation}</span>
+            <span>{authorName}</span>
+            {displayLocation && <span style={{ fontSize: '0.9em', opacity: 0.85 }}>{displayLocation}</span>}
           </div>
           <span className="card-action-btn">
             <span>{text.seeDetail}</span>

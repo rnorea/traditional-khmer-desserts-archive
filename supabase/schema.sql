@@ -5,6 +5,7 @@ create table public.profiles (
   username text unique not null,
   full_name text,
   organization text,
+  role text default 'user' not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
@@ -21,13 +22,14 @@ language plpgsql
 security definer set search_path = ''
 as $$
 begin
-  insert into public.profiles (id, email, username, full_name, organization)
+  insert into public.profiles (id, email, username, full_name, organization, role)
   values (
     new.id,
     new.email,
     new.raw_user_meta_data->>'username',
     new.raw_user_meta_data->>'full_name',
-    new.raw_user_meta_data->>'organization'
+    new.raw_user_meta_data->>'organization',
+    'user'
   );
   return new;
 end;
@@ -43,21 +45,32 @@ create trigger on_auth_user_created
 create table public.entries (
   id uuid default gen_random_uuid() primary key,
   title_en text not null,
-  title_km text not null,
+  title_kh text not null,
   description_en text not null,
-  description_km text not null,
+  description_kh text not null,
   ingredients_en text not null,
-  ingredients_km text not null,
+  ingredients_kh text not null,
+  instructions_en text not null,
+  instructions_kh text not null,
   image_url text,
   status text default 'published' not null,
-  contributor_id uuid references public.profiles(id) on delete cascade not null,
+  author_id uuid references public.profiles(id) on delete set null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
 -- Set up Row Level Security for entries
 alter table public.entries enable row level security;
 create policy "Everyone can view published entries." on public.entries for select using (status = 'published');
-create policy "Users can view their own entries regardless of status." on public.entries for select using (auth.uid() = contributor_id);
-create policy "Users can insert entries." on public.entries for insert with check (auth.uid() = contributor_id);
-create policy "Users can update their own entries." on public.entries for update using (auth.uid() = contributor_id);
-create policy "Users can delete their own entries." on public.entries for delete using (auth.uid() = contributor_id);
+create policy "Users can view their own entries regardless of status." on public.entries for select using (auth.uid() = author_id);
+create policy "Admins can view all entries." on public.entries for select using (
+  exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+);
+create policy "Users can insert entries." on public.entries for insert with check (auth.uid() = author_id);
+create policy "Users can update their own entries." on public.entries for update using (auth.uid() = author_id);
+create policy "Admins can update all entries." on public.entries for update using (
+  exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+);
+create policy "Users can delete their own entries." on public.entries for delete using (auth.uid() = author_id);
+create policy "Admins can delete all entries." on public.entries for delete using (
+  exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+);

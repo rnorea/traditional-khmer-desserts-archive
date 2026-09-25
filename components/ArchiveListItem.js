@@ -4,20 +4,22 @@ import { t } from '../data/translations.js';
 export default function ArchiveListItem({ entry, language }) {
   const text = t[language] || t.en;
 
-  const displayName = language === 'kh' ? (entry.nativeName || entry.name) : entry.name;
-  const formatCategory = (cat, fallback) => cat ? (Array.isArray(cat) ? cat.join(", ") : cat) : fallback;
-  const displayCategory = language === 'kh' ? formatCategory(entry.categoryKm || entry.category, 'បង្អែម') : formatCategory(entry.category, 'Desserts');
-  const displayDescription = language === 'kh' ? (entry.descriptionKm || entry.description) : entry.description;
-  const displayLocation = language === 'kh' ? (entry.locationKm || entry.location) : entry.location;
-  const displaySource = language === 'kh' ? (entry.sourceKm || entry.source || 'មិនមានប្រភព') : (entry.source || 'Unknown');
-  const displayPrepTime = language === 'kh' ? (entry.prepTimeKm || entry.prepTime || text.na) : (entry.prepTime || text.na);
-  const displayPrimaryIng = language === 'kh' ? (entry.ingredientsKm?.[0] || entry.ingredients?.[0]) : entry.ingredients?.[0];
+  const displayName = language === 'kh' ? (entry.title_kh || entry.title_en) : entry.title_en;
+  const displayCategory = language === 'kh' ? 'បង្អែម' : 'Desserts';
+  const displayDescription = language === 'kh' ? (entry.description_kh || entry.description_en) : entry.description_en;
+  const displayLocation = '';
+  const authorName = entry.profiles?.full_name || (language === 'kh' ? 'មិនមានអ្នកនិពន្ធ' : 'Unknown Author');
+  const displayPrepTime = text.na;
+  
+  // Extract first line of ingredients
+  const ingredientsField = language === 'kh' ? (entry.ingredients_kh || entry.ingredients_en) : entry.ingredients_en;
+  const displayPrimaryIng = ingredientsField ? ingredientsField.split('\n')[0] : '';
 
   return (
     <Link href={`/archive/${entry.id}`} className="list-row" style={{ textDecoration: 'none', color: 'inherit' }}>
       <div className="list-photo">
         <img 
-          src={entry.images?.[0] || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=400"} 
+          src={entry.image_url || "/images/dessert_placeholder.jpg"} 
           alt={displayName} 
         />
       </div>
@@ -28,8 +30,8 @@ export default function ArchiveListItem({ entry, language }) {
             <span className="list-badge">{displayCategory}</span>
           </div>
           <div className="list-origin-tag" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px' }}>
-            <span>{displaySource}</span>
-            <span style={{ fontSize: '0.9em', opacity: 0.85 }}>{displayLocation}</span>
+            <span>{authorName}</span>
+            {displayLocation && <span style={{ fontSize: '0.9em', opacity: 0.85 }}>{displayLocation}</span>}
           </div>
         </div>
         <p className="list-description">

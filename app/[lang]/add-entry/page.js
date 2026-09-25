@@ -72,8 +72,8 @@ export default function AddEntryPage() {
                 <input id="title_en" name="title_en" type="text" required style={inputStyle} />
               </div>
               <div style={{ flex: '1 1 300px' }}>
-                <label htmlFor="title_km" style={labelStyle}>ចំណងជើង (Khmer) *</label>
-                <input id="title_km" name="title_km" type="text" required style={inputStyle} />
+                <label htmlFor="title_kh" style={labelStyle}>ចំណងជើង (Khmer) *</label>
+                <input id="title_kh" name="title_kh" type="text" required style={inputStyle} />
               </div>
             </div>
 
@@ -84,8 +84,8 @@ export default function AddEntryPage() {
                 <textarea id="description_en" name="description_en" required rows="5" style={inputStyle} />
               </div>
               <div style={{ flex: '1 1 300px' }}>
-                <label htmlFor="description_km" style={labelStyle}>ការពិពណ៌នា (Khmer) *</label>
-                <textarea id="description_km" name="description_km" required rows="5" style={inputStyle} />
+                <label htmlFor="description_kh" style={labelStyle}>ការពិពណ៌នា (Khmer) *</label>
+                <textarea id="description_kh" name="description_kh" required rows="5" style={inputStyle} />
               </div>
             </div>
 
@@ -96,8 +96,20 @@ export default function AddEntryPage() {
                 <textarea id="ingredients_en" name="ingredients_en" required rows="4" style={inputStyle} placeholder="E.g., Coconut milk, Palm sugar..." />
               </div>
               <div style={{ flex: '1 1 300px' }}>
-                <label htmlFor="ingredients_km" style={labelStyle}>គ្រឿងផ្សំ (Khmer) *</label>
-                <textarea id="ingredients_km" name="ingredients_km" required rows="4" style={inputStyle} placeholder="ឧទាហរណ៍៖ ខ្ទិះដូង, ស្ករត្នោត..." />
+                <label htmlFor="ingredients_kh" style={labelStyle}>គ្រឿងផ្សំ (Khmer) *</label>
+                <textarea id="ingredients_kh" name="ingredients_kh" required rows="4" style={inputStyle} placeholder="ឧទាហរណ៍៖ ខ្ទិះដូង, ស្ករត្នោត..." />
+              </div>
+            </div>
+
+            {/* Instructions */}
+            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+              <div style={{ flex: '1 1 300px' }}>
+                <label htmlFor="instructions_en" style={labelStyle}>Instructions (English) *</label>
+                <textarea id="instructions_en" name="instructions_en" required rows="5" style={inputStyle} placeholder="Press Enter to separate steps (e.g.,&#10;1. Boil water&#10;2. Add sugar)" />
+              </div>
+              <div style={{ flex: '1 1 300px' }}>
+                <label htmlFor="instructions_kh" style={labelStyle}>ការណែនាំ (Khmer) *</label>
+                <textarea id="instructions_kh" name="instructions_kh" required rows="5" style={inputStyle} placeholder="ចុច Enter ដើម្បីបំបែកជំហាននីមួយៗ (ឧ.&#10;១. ដាំទឹកឱ្យពុះ&#10;២. ដាក់ស្ករ)" />
               </div>
             </div>
 

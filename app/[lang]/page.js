@@ -1,23 +1,34 @@
-"use client";
-
-import { useParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "../../components/Navbar.js";
 import Hero from "../../components/Hero.js";
 import EntryCard from "../../components/EntryCard.js";
 import Footer from "../../components/Footer.js";
-import { traditionalKhmerDesserts } from "../../data/entries.js";
+import { createClient } from "../../utils/supabase/server.js";
 
-export default function Home() {
-  const params = useParams();
-  const language = params?.lang || 'en';
+export default async function Home({ params }) {
+  const resolvedParams = await params;
+  const language = resolvedParams?.lang || 'en';
 
-  const featuredEntries = traditionalKhmerDesserts.slice(0, 4);
+  const supabase = await createClient();
+  
+  // Fetch total count of published entries
+  const { count } = await supabase
+    .from('entries')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'published');
+
+  // Fetch featured entries (first 4)
+  const { data: featuredEntries } = await supabase
+    .from('entries')
+    .select('*, profiles(full_name)')
+    .eq('status', 'published')
+    .order('created_at', { ascending: true })
+    .limit(4);
 
   return (
     <>
       <Navbar language={language} />
-      <Hero totalEntries={traditionalKhmerDesserts.length} language={language} />
+      <Hero totalEntries={count || 0} language={language} />
       
       <main className="container" id="archive">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
@@ -27,7 +38,7 @@ export default function Home() {
         </div>
 
         <div className="archive-grid">
-          {featuredEntries.map(entry => (
+          {featuredEntries?.map(entry => (
             <EntryCard key={entry.id} entry={entry} language={language} />
           ))}
         </div>

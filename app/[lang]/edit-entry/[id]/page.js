@@ -28,15 +28,16 @@ export default function EditEntryPage() {
         return;
       }
 
+      // We remove the hardcoded author check and let RLS policies 
+      // decide if this user (Author or Admin) is allowed to fetch it.
       const { data: entryData, error } = await supabase
         .from('entries')
         .select('*')
         .eq('id', entryId)
-        .eq('contributor_id', user.id)
         .single();
         
       if (error || !entryData) {
-        // Entry not found or doesn't belong to user
+        // Entry not found or user is not authorized to edit it
         router.push(`/${language}/profile`);
       } else {
         setEntry(entryData);
@@ -95,8 +96,8 @@ export default function EditEntryPage() {
                 <input id="title_en" name="title_en" type="text" defaultValue={entry.title_en} required style={inputStyle} />
               </div>
               <div style={{ flex: '1 1 300px' }}>
-                <label htmlFor="title_km" style={labelStyle}>ចំណងជើង (Khmer) *</label>
-                <input id="title_km" name="title_km" type="text" defaultValue={entry.title_km} required style={inputStyle} />
+                <label htmlFor="title_kh" style={labelStyle}>ចំណងជើង (Khmer) *</label>
+                <input id="title_kh" name="title_kh" type="text" defaultValue={entry.title_kh} required style={inputStyle} />
               </div>
             </div>
 
@@ -107,8 +108,8 @@ export default function EditEntryPage() {
                 <textarea id="description_en" name="description_en" defaultValue={entry.description_en} required rows="5" style={inputStyle} />
               </div>
               <div style={{ flex: '1 1 300px' }}>
-                <label htmlFor="description_km" style={labelStyle}>ការពិពណ៌នា (Khmer) *</label>
-                <textarea id="description_km" name="description_km" defaultValue={entry.description_km} required rows="5" style={inputStyle} />
+                <label htmlFor="description_kh" style={labelStyle}>ការពិពណ៌នា (Khmer) *</label>
+                <textarea id="description_kh" name="description_kh" defaultValue={entry.description_kh} required rows="5" style={inputStyle} />
               </div>
             </div>
 
@@ -119,8 +120,20 @@ export default function EditEntryPage() {
                 <textarea id="ingredients_en" name="ingredients_en" defaultValue={entry.ingredients_en} required rows="4" style={inputStyle} />
               </div>
               <div style={{ flex: '1 1 300px' }}>
-                <label htmlFor="ingredients_km" style={labelStyle}>គ្រឿងផ្សំ (Khmer) *</label>
-                <textarea id="ingredients_km" name="ingredients_km" defaultValue={entry.ingredients_km} required rows="4" style={inputStyle} />
+                <label htmlFor="ingredients_kh" style={labelStyle}>គ្រឿងផ្សំ (Khmer) *</label>
+                <textarea id="ingredients_kh" name="ingredients_kh" defaultValue={entry.ingredients_kh} required rows="4" style={inputStyle} />
+              </div>
+            </div>
+
+            {/* Instructions */}
+            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+              <div style={{ flex: '1 1 300px' }}>
+                <label htmlFor="instructions_en" style={labelStyle}>Instructions (English) *</label>
+                <textarea id="instructions_en" name="instructions_en" defaultValue={entry.instructions_en} required rows="5" style={inputStyle} />
+              </div>
+              <div style={{ flex: '1 1 300px' }}>
+                <label htmlFor="instructions_kh" style={labelStyle}>ការណែនាំ (Khmer) *</label>
+                <textarea id="instructions_kh" name="instructions_kh" defaultValue={entry.instructions_kh} required rows="5" style={inputStyle} />
               </div>
             </div>
 
