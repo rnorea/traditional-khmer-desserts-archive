@@ -71,7 +71,7 @@ export default function MyArchivePage() {
             <h2 style={{ fontSize: '1.5rem', color: 'var(--green-primary)', margin: 0 }}>
               {language === 'en' ? 'My Archive' : 'បណ្ណសាររបស់ខ្ញុំ'}
             </h2>
-            <Link href={`/${language}/add-entry`} className="btn-cta-primary" style={{ padding: '0.5rem 1rem', textDecoration: 'none' }}>
+            <Link href={`/${language}/contribute`} className="btn-cta-primary" style={{ padding: '0.5rem 1rem', textDecoration: 'none' }}>
               {language === 'en' ? 'Add New Entry' : 'បន្ថែមឯកសារថ្មី'}
             </Link>
           </div>

@@ -88,6 +88,10 @@ export default function ArchivePage() {
   const filteredAndSortedEntries = useMemo(() => {
     let result = [...dbEntries];
 
+    if (filterType !== "all") {
+      result = result.filter(entry => entry.category === filterType);
+    }
+
     const query = cleanText(searchQuery);
 
     if (query) {
@@ -140,7 +144,7 @@ export default function ArchivePage() {
         case "date-old":
           return new Date(a.created_at) - new Date(b.created_at);
         case "region":
-          return new Date(b.created_at) - new Date(a.created_at); // region removed, sort by date instead
+          return (a.region_en || "").localeCompare(b.region_en || "");
         default:
           return 0;
       }

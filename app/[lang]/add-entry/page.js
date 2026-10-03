@@ -112,7 +112,42 @@ export default function AddEntryPage() {
                 <textarea id="instructions_kh" name="instructions_kh" required rows="5" style={inputStyle} placeholder="ចុច Enter ដើម្បីបំបែកជំហាននីមួយៗ (ឧ.&#10;១. ដាំទឹកឱ្យពុះ&#10;២. ដាក់ស្ករ)" />
               </div>
             </div>
+            {/* Category */}
+            <div>
+              <label htmlFor="category" style={labelStyle}>
+                {language === 'en' ? 'Category' : 'ប្រភេទ'}
+              </label>
+              <select id="category" name="category" style={inputStyle} defaultValue="stickyRice">
+                <option value="stickyRice">{language === 'en' ? 'Sticky Rice' : 'នំដំណើប'}</option>
+                <option value="sweetSoups">{language === 'en' ? 'Sweet Soups' : 'បង្អែមទឹក'}</option>
+                <option value="steamedSweets">{language === 'en' ? 'Steamed Sweets' : 'នំចំហុយ'}</option>
+                <option value="snacks">{language === 'en' ? 'Snacks' : 'ចំណីចំណុក'}</option>
+              </select>
+            </div>
 
+            {/* Region */}
+            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+              <div style={{ flex: '1 1 300px' }}>
+                <label htmlFor="region_en" style={labelStyle}>Region (English) - Optional</label>
+                <input id="region_en" name="region_en" type="text" style={inputStyle} placeholder="E.g., Battambang" />
+              </div>
+              <div style={{ flex: '1 1 300px' }}>
+                <label htmlFor="region_kh" style={labelStyle}>តំបន់ (Khmer) - ជាជម្រើស</label>
+                <input id="region_kh" name="region_kh" type="text" style={inputStyle} placeholder="ឧទាហរណ៍៖ បាត់ដំបង" />
+              </div>
+            </div>
+
+            {/* Source */}
+            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+              <div style={{ flex: '1 1 300px' }}>
+                <label htmlFor="source_en" style={labelStyle}>Source Provider (English) - Optional</label>
+                <input id="source_en" name="source_en" type="text" style={inputStyle} placeholder="E.g., Om Sokha" />
+              </div>
+              <div style={{ flex: '1 1 300px' }}>
+                <label htmlFor="source_kh" style={labelStyle}>ប្រភពផ្តល់ព័ត៌មាន (Khmer) - ជាជម្រើស</label>
+                <input id="source_kh" name="source_kh" type="text" style={inputStyle} placeholder="ឧទាហរណ៍៖ អ៊ុំសុខា" />
+              </div>
+            </div>
             {/* Image URL */}
             <div>
               <label htmlFor="image_url" style={labelStyle}>

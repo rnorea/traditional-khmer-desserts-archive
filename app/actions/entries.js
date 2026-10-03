@@ -20,6 +20,11 @@ export async function addEntry(prevState, formData) {
   const instructions_en = formData.get('instructions_en');
   const instructions_kh = formData.get('instructions_kh');
   const image_url = formData.get('image_url') || null;
+  const category = formData.get('category') || null;
+  const region_en = formData.get('region_en') || null;
+  const region_kh = formData.get('region_kh') || null;
+  const source_en = formData.get('source_en') || null;
+  const source_kh = formData.get('source_kh') || null;
 
   if (!title_en || !title_kh || !description_en || !description_kh || !ingredients_en || !ingredients_kh || !instructions_en || !instructions_kh) {
     return { error: 'Please fill in all required fields in both languages.' };
@@ -37,6 +42,11 @@ export async function addEntry(prevState, formData) {
       instructions_en,
       instructions_kh,
       image_url,
+      category,
+      region_en,
+      region_kh,
+      source_en,
+      source_kh,
       status: 'published',
       author_id: user.id
     }]);
@@ -68,6 +78,11 @@ export async function updateEntry(prevState, formData) {
   const instructions_en = formData.get('instructions_en');
   const instructions_kh = formData.get('instructions_kh');
   const image_url = formData.get('image_url') || null;
+  const category = formData.get('category') || null;
+  const region_en = formData.get('region_en') || null;
+  const region_kh = formData.get('region_kh') || null;
+  const source_en = formData.get('source_en') || null;
+  const source_kh = formData.get('source_kh') || null;
 
   if (!id || !title_en || !title_kh || !description_en || !description_kh || !ingredients_en || !ingredients_kh || !instructions_en || !instructions_kh) {
     return { error: 'Please fill in all required fields in both languages.' };
@@ -86,7 +101,12 @@ export async function updateEntry(prevState, formData) {
       ingredients_kh,
       instructions_en,
       instructions_kh,
-      image_url
+      image_url,
+      category,
+      region_en,
+      region_kh,
+      source_en,
+      source_kh
     })
     .eq('id', id);
 

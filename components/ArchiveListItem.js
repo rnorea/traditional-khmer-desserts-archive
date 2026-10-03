@@ -5,10 +5,11 @@ export default function ArchiveListItem({ entry, language }) {
   const text = t[language] || t.en;
 
   const displayName = language === 'kh' ? (entry.title_kh || entry.title_en) : entry.title_en;
-  const displayCategory = language === 'kh' ? 'បង្អែម' : 'Desserts';
+  const displayCategory = entry.category && text[entry.category] ? text[entry.category] : (language === 'kh' ? 'បង្អែម' : 'Desserts');
   const displayDescription = language === 'kh' ? (entry.description_kh || entry.description_en) : entry.description_en;
-  const displayLocation = '';
-  const authorName = entry.profiles?.full_name || (language === 'kh' ? 'មិនមានអ្នកនិពន្ធ' : 'Unknown Author');
+  const displayLocation = language === 'kh' ? (entry.region_kh || entry.region_en) : (entry.region_en || entry.region_kh);
+  const displaySource = language === 'kh' ? (entry.source_kh || entry.source_en) : (entry.source_en || entry.source_kh);
+  const authorName = displaySource || entry.profiles?.full_name || (language === 'kh' ? 'មិនមានអ្នកនិពន្ធ' : 'Unknown Author');
   const displayPrepTime = text.na;
   
   // Extract first line of ingredients

@@ -5,11 +5,11 @@ export default function EntryCard({ entry, language }) {
   const text = t[language] || t.en;
 
   const displayName = language === 'kh' ? (entry.title_kh || entry.title_en) : entry.title_en;
-  // Fallback to empty string since categories aren't in the db anymore
-  const displayCategory = language === 'kh' ? 'បង្អែម' : 'Desserts'; 
+  const displayCategory = entry.category && text[entry.category] ? text[entry.category] : (language === 'kh' ? 'បង្អែម' : 'Desserts'); 
   const displayDescription = language === 'kh' ? (entry.description_kh || entry.description_en) : entry.description_en;
-  const displayLocation = ''; // Removed from schema
-  const authorName = entry.profiles?.full_name || (language === 'kh' ? 'មិនមានអ្នកនិពន្ធ' : 'Unknown Author');
+  const displayLocation = language === 'kh' ? (entry.region_kh || entry.region_en) : (entry.region_en || entry.region_kh);
+  const displaySource = language === 'kh' ? (entry.source_kh || entry.source_en) : (entry.source_en || entry.source_kh);
+  const authorName = displaySource || entry.profiles?.full_name || (language === 'kh' ? 'មិនមានអ្នកនិពន្ធ' : 'Unknown Author');
 
   return (
     <Link href={`/archive/${entry.id}`} className="archive-card" style={{ textDecoration: 'none', color: 'inherit' }}>

@@ -53,6 +53,11 @@ create table public.entries (
   instructions_en text not null,
   instructions_kh text not null,
   image_url text,
+  category text,
+  region_en text,
+  region_kh text,
+  source_en text,
+  source_kh text,
   status text default 'published' not null,
   author_id uuid references public.profiles(id) on delete set null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
