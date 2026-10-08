@@ -55,6 +55,70 @@ export default function ContributePage() {
     );
   }
 
+  const validateField = (name, value) => {
+    const isRequired = ['title_en', 'title_kh', 'description_en', 'description_kh', 'ingredients_en', 'ingredients_kh', 'instructions_en', 'instructions_kh'].includes(name);
+    
+    if (!value || (typeof value === 'string' && value.trim() === '')) {
+      return isRequired ? (language === 'en' ? 'This field is required.' : 'ប្រអប់នេះតម្រូវឲ្យបំពេញ។') : null;
+    }
+
+    const fieldBase = name.replace(/_en$|_kh$/, '');
+    const isEnglish = name.endsWith('_en');
+
+    if (isEnglish) {
+      const hasKhmer = /[\u1780-\u17FF]/.test(value);
+      if (hasKhmer) return language === 'en' ? 'Cannot contain Khmer characters.' : 'មិនអាចមានតួអក្សរខ្មែរទេ។';
+      
+      const wordCount = value.trim().split(/\s+/).filter(w => w.length > 0).length;
+      let minWords = 1;
+      if (fieldBase === 'description' || fieldBase === 'ingredients') minWords = 5;
+      else if (fieldBase === 'instructions') minWords = 10;
+      
+      if (wordCount < minWords) {
+        return language === 'en' ? `Must contain at least ${minWords} word${minWords > 1 ? 's' : ''}.` : `ត្រូវមានយ៉ាងហោចណាស់ ${minWords} ពាក្យ។`;
+      }
+    } else if (name.endsWith('_kh')) {
+      const hasEnglish = /[a-zA-Z]/.test(value);
+      if (hasEnglish) return language === 'en' ? 'Cannot contain English characters.' : 'មិនអាចមានតួអក្សរអង់គ្លេសទេ។';
+      
+      const charCount = value.trim().length;
+      let minChars = 2;
+      if (fieldBase === 'description' || fieldBase === 'ingredients' || fieldBase === 'instructions') minChars = 10;
+      
+      if (charCount < minChars) {
+        return language === 'en' ? `Must be at least ${minChars} characters long.` : `ត្រូវមានយ៉ាងហោចណាស់ ${minChars} តួអក្សរ។`;
+      }
+    }
+    return null;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name.endsWith('_en') || name.endsWith('_kh')) {
+      const errorMsg = validateField(name, value);
+      setFieldErrors(prev => ({ ...prev, [name]: errorMsg }));
+    } else if (name === 'photo') {
+      const file = e.target.files[0];
+      if (file) {
+        if (file.size > 5242880) {
+          setFieldErrors(prev => ({ ...prev, photo: language === 'en' ? 'Photo must be under 5MB.' : 'រូបថតត្រូវតែតូចជាង 5MB។' }));
+        } else if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+          setFieldErrors(prev => ({ ...prev, photo: language === 'en' ? 'Only JPEG, PNG, and WebP are allowed.' : 'អនុញ្ញាតតែ JPEG, PNG, និង WebP ប៉ុណ្ណោះ។' }));
+        } else {
+          setFieldErrors(prev => ({ ...prev, photo: null }));
+        }
+      }
+    }
+  };
+
+  const getInputStyle = (fieldName) => {
+    const baseStyle = { width: '100%', padding: '0.75rem', border: '1px solid var(--border-subtle)', borderRadius: '4px', fontSize: '1rem', fontFamily: 'inherit' };
+    if (fieldErrors[fieldName]) {
+      return { ...baseStyle, border: '2px solid #d32f2f', outline: 'none' };
+    }
+    return baseStyle;
+  };
+
   const validateForm = (data) => {
     const errors = {};
     const rules = {
@@ -66,25 +130,34 @@ export default function ContributePage() {
       ingredients_kh: { max: 5000, req: true },
       instructions_en: { max: 5000, req: true },
       instructions_kh: { max: 5000, req: true },
+      region_en: { max: 100, req: false },
+      region_kh: { max: 100, req: false },
+      source_en: { max: 100, req: false },
+      source_kh: { max: 100, req: false },
     };
 
     for (const [field, rule] of Object.entries(rules)) {
-      if (rule.req && !data[field]) {
-        errors[field] = 'This field is required.';
+      if (rule.req && (!data[field] || data[field].trim() === '')) {
+        errors[field] = language === 'en' ? 'This field is required.' : 'ប្រអប់នេះតម្រូវឲ្យបំពេញ។';
       } else if (data[field] && data[field].length > rule.max) {
         errors[field] = `Cannot exceed ${rule.max} characters.`;
+      }
+      
+      const langError = validateField(field, data[field]);
+      if (langError) {
+        errors[field] = langError;
       }
     }
     
     if (!data.photo || data.photo.size === 0) {
-      errors.photo = 'A photo is required.';
+      errors.photo = language === 'en' ? 'A photo is required.' : 'តម្រូវឲ្យមានរូបថត។';
     } else {
       const file = data.photo;
       if (file.size > 5242880) {
-        errors.photo = 'Photo must be under 5MB.';
+        errors.photo = language === 'en' ? 'Photo must be under 5MB.' : 'រូបថតត្រូវតែតូចជាង 5MB។';
       }
       if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-        errors.photo = 'Only JPEG, PNG, and WebP are allowed.';
+        errors.photo = language === 'en' ? 'Only JPEG, PNG, and WebP are allowed.' : 'អនុញ្ញាតតែ JPEG, PNG, និង WebP ប៉ុណ្ណោះ។';
       }
     }
 
@@ -210,7 +283,6 @@ export default function ContributePage() {
     }
   };
 
-  const inputStyle = { width: '100%', padding: '0.75rem', border: '1px solid var(--border-subtle)', borderRadius: '4px', fontSize: '1rem', fontFamily: 'inherit' };
   const labelStyle = { fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', display: 'block', fontWeight: '500' };
   const errorStyle = { color: '#d32f2f', fontSize: '0.75rem', marginTop: '0.25rem' };
 
@@ -224,7 +296,7 @@ export default function ContributePage() {
             {language === 'en' ? 'Contribute an Entry' : 'ចូលរួមឯកសារ'}
           </h1>
           
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             {errorMsg && (
               <div style={{ color: '#d32f2f', backgroundColor: '#ffebee', padding: '1rem', borderRadius: '4px', fontSize: '0.875rem' }}>
                 {errorMsg}
@@ -235,12 +307,12 @@ export default function ContributePage() {
             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
               <div style={{ flex: '1 1 300px' }}>
                 <label htmlFor="title_en" style={labelStyle}>Title (English) *</label>
-                <input id="title_en" name="title_en" type="text" style={inputStyle} />
+                <input id="title_en" name="title_en" type="text" style={getInputStyle('title_en')} onChange={handleChange} onBlur={handleChange} />
                 {fieldErrors.title_en && <div style={errorStyle}>{fieldErrors.title_en}</div>}
               </div>
               <div style={{ flex: '1 1 300px' }}>
                 <label htmlFor="title_kh" style={labelStyle}>ចំណងជើង (Khmer) *</label>
-                <input id="title_kh" name="title_kh" type="text" style={inputStyle} />
+                <input id="title_kh" name="title_kh" type="text" style={getInputStyle('title_kh')} onChange={handleChange} onBlur={handleChange} />
                 {fieldErrors.title_kh && <div style={errorStyle}>{fieldErrors.title_kh}</div>}
               </div>
             </div>
@@ -249,12 +321,12 @@ export default function ContributePage() {
             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
               <div style={{ flex: '1 1 300px' }}>
                 <label htmlFor="description_en" style={labelStyle}>Description (English) *</label>
-                <textarea id="description_en" name="description_en" rows="5" style={inputStyle} />
+                <textarea id="description_en" name="description_en" rows="5" style={getInputStyle('description_en')} onChange={handleChange} onBlur={handleChange} />
                 {fieldErrors.description_en && <div style={errorStyle}>{fieldErrors.description_en}</div>}
               </div>
               <div style={{ flex: '1 1 300px' }}>
                 <label htmlFor="description_kh" style={labelStyle}>ការពិពណ៌នា (Khmer) *</label>
-                <textarea id="description_kh" name="description_kh" rows="5" style={inputStyle} />
+                <textarea id="description_kh" name="description_kh" rows="5" style={getInputStyle('description_kh')} onChange={handleChange} onBlur={handleChange} />
                 {fieldErrors.description_kh && <div style={errorStyle}>{fieldErrors.description_kh}</div>}
               </div>
             </div>
@@ -263,12 +335,12 @@ export default function ContributePage() {
             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
               <div style={{ flex: '1 1 300px' }}>
                 <label htmlFor="ingredients_en" style={labelStyle}>Ingredients (English) *</label>
-                <textarea id="ingredients_en" name="ingredients_en" rows="4" style={inputStyle} />
+                <textarea id="ingredients_en" name="ingredients_en" rows="4" style={getInputStyle('ingredients_en')} onChange={handleChange} onBlur={handleChange} />
                 {fieldErrors.ingredients_en && <div style={errorStyle}>{fieldErrors.ingredients_en}</div>}
               </div>
               <div style={{ flex: '1 1 300px' }}>
                 <label htmlFor="ingredients_kh" style={labelStyle}>គ្រឿងផ្សំ (Khmer) *</label>
-                <textarea id="ingredients_kh" name="ingredients_kh" rows="4" style={inputStyle} />
+                <textarea id="ingredients_kh" name="ingredients_kh" rows="4" style={getInputStyle('ingredients_kh')} onChange={handleChange} onBlur={handleChange} />
                 {fieldErrors.ingredients_kh && <div style={errorStyle}>{fieldErrors.ingredients_kh}</div>}
               </div>
             </div>
@@ -277,12 +349,12 @@ export default function ContributePage() {
             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
               <div style={{ flex: '1 1 300px' }}>
                 <label htmlFor="instructions_en" style={labelStyle}>Instructions (English) *</label>
-                <textarea id="instructions_en" name="instructions_en" rows="5" style={inputStyle} />
+                <textarea id="instructions_en" name="instructions_en" rows="5" style={getInputStyle('instructions_en')} onChange={handleChange} onBlur={handleChange} />
                 {fieldErrors.instructions_en && <div style={errorStyle}>{fieldErrors.instructions_en}</div>}
               </div>
               <div style={{ flex: '1 1 300px' }}>
                 <label htmlFor="instructions_kh" style={labelStyle}>ការណែនាំ (Khmer) *</label>
-                <textarea id="instructions_kh" name="instructions_kh" rows="5" style={inputStyle} />
+                <textarea id="instructions_kh" name="instructions_kh" rows="5" style={getInputStyle('instructions_kh')} onChange={handleChange} onBlur={handleChange} />
                 {fieldErrors.instructions_kh && <div style={errorStyle}>{fieldErrors.instructions_kh}</div>}
               </div>
             </div>
@@ -292,7 +364,7 @@ export default function ContributePage() {
               <label htmlFor="category" style={labelStyle}>
                 {language === 'en' ? 'Category' : 'ប្រភេទ'}
               </label>
-              <select id="category" name="category" style={inputStyle} defaultValue="stickyRice">
+              <select id="category" name="category" style={getInputStyle('category')} defaultValue="stickyRice" onChange={handleChange} onBlur={handleChange}>
                 <option value="stickyRice">{language === 'en' ? 'Sticky Rice' : 'នំដំណើប'}</option>
                 <option value="sweetSoups">{language === 'en' ? 'Sweet Soups' : 'បង្អែមទឹក'}</option>
                 <option value="steamedSweets">{language === 'en' ? 'Steamed Sweets' : 'នំចំហុយ'}</option>
@@ -304,11 +376,13 @@ export default function ContributePage() {
             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
               <div style={{ flex: '1 1 300px' }}>
                 <label htmlFor="region_en" style={labelStyle}>Region (English) - Optional</label>
-                <input id="region_en" name="region_en" type="text" style={inputStyle} />
+                <input id="region_en" name="region_en" type="text" style={getInputStyle('region_en')} onChange={handleChange} onBlur={handleChange} />
+                {fieldErrors.region_en && <div style={errorStyle}>{fieldErrors.region_en}</div>}
               </div>
               <div style={{ flex: '1 1 300px' }}>
                 <label htmlFor="region_kh" style={labelStyle}>តំបន់ (Khmer) - ជាជម្រើស</label>
-                <input id="region_kh" name="region_kh" type="text" style={inputStyle} />
+                <input id="region_kh" name="region_kh" type="text" style={getInputStyle('region_kh')} onChange={handleChange} onBlur={handleChange} />
+                {fieldErrors.region_kh && <div style={errorStyle}>{fieldErrors.region_kh}</div>}
               </div>
             </div>
 
@@ -316,11 +390,13 @@ export default function ContributePage() {
             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
               <div style={{ flex: '1 1 300px' }}>
                 <label htmlFor="source_en" style={labelStyle}>Source Provider (English) - Optional</label>
-                <input id="source_en" name="source_en" type="text" style={inputStyle} />
+                <input id="source_en" name="source_en" type="text" style={getInputStyle('source_en')} onChange={handleChange} onBlur={handleChange} />
+                {fieldErrors.source_en && <div style={errorStyle}>{fieldErrors.source_en}</div>}
               </div>
               <div style={{ flex: '1 1 300px' }}>
                 <label htmlFor="source_kh" style={labelStyle}>ប្រភពផ្តល់ព័ត៌មាន (Khmer) - ជាជម្រើស</label>
-                <input id="source_kh" name="source_kh" type="text" style={inputStyle} />
+                <input id="source_kh" name="source_kh" type="text" style={getInputStyle('source_kh')} onChange={handleChange} onBlur={handleChange} />
+                {fieldErrors.source_kh && <div style={errorStyle}>{fieldErrors.source_kh}</div>}
               </div>
             </div>
 
@@ -329,7 +405,7 @@ export default function ContributePage() {
               <label htmlFor="photo" style={labelStyle}>
                 {language === 'en' ? 'Photo (Required, max 5MB, JPEG/PNG/WebP)' : 'រូបថត (ចាំបាច់, អតិបរមា 5MB, JPEG/PNG/WebP)'}
               </label>
-              <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp" style={inputStyle} />
+              <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp" style={getInputStyle('photo')} onChange={handleChange} onBlur={handleChange} />
               {fieldErrors.photo && <div style={errorStyle}>{fieldErrors.photo}</div>}
             </div>
             
