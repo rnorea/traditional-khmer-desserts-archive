@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Navbar from '../../../components/Navbar.js';
@@ -12,6 +12,61 @@ export default function SignupPage() {
   const language = params?.lang || 'en';
   const [state, formAction, isPending] = useActionState(signup, null);
 
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
+
+  const validateField = (name, value, otherValue = '') => {
+    if (!value) return language === 'en' ? 'This field is required.' : 'ប្រអប់នេះតម្រូវឲ្យបំពេញ។';
+    
+    if (name === 'password') {
+      if (value.length < 6) {
+        return language === 'en' ? 'Password must be at least 6 characters.' : 'ពាក្យសម្ងាត់ត្រូវមានយ៉ាងហោចណាស់ ៦ តួអក្សរ។';
+      }
+    } else if (name === 'confirm_password') {
+      if (value !== otherValue) {
+        return language === 'en' ? 'Passwords do not match.' : 'ពាក្យសម្ងាត់មិនត្រូវគ្នាទេ។';
+      }
+    }
+    return null;
+  };
+
+  const handlePasswordChange = (e) => {
+    const val = e.target.value;
+    setPassword(val);
+    const errorMsg = validateField('password', val);
+    let confirmErrorMsg = fieldErrors.confirm_password;
+    if (confirmPassword) {
+      confirmErrorMsg = validateField('confirm_password', confirmPassword, val);
+    }
+    setFieldErrors(prev => ({ ...prev, password: errorMsg, confirm_password: confirmErrorMsg }));
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    const val = e.target.value;
+    setConfirmPassword(val);
+    const errorMsg = validateField('confirm_password', val, password);
+    setFieldErrors(prev => ({ ...prev, confirm_password: errorMsg }));
+  };
+
+  const getInputStyle = (fieldName) => {
+    const baseStyle = { width: '100%', padding: '0.75rem', border: '1px solid var(--border-subtle)', borderRadius: '4px', fontSize: '1rem' };
+    if (fieldErrors[fieldName]) {
+      return { ...baseStyle, border: '2px solid #d32f2f', outline: 'none' };
+    }
+    return baseStyle;
+  };
+
+  const handleSubmit = (e) => {
+    const passError = validateField('password', password);
+    const confirmError = validateField('confirm_password', confirmPassword, password);
+    
+    if (passError || confirmError) {
+      e.preventDefault();
+      setFieldErrors(prev => ({ ...prev, password: passError, confirm_password: confirmError }));
+    }
+  };
+
   return (
     <>
       <Navbar language={language} />
@@ -22,7 +77,7 @@ export default function SignupPage() {
             {language === 'en' ? 'Create an Account' : 'បង្កើតគណនី'}
           </h1>
           
-          <form action={formAction} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <form action={formAction} onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {state?.error && (
               <div style={{ color: '#d32f2f', backgroundColor: '#ffebee', padding: '0.75rem', borderRadius: '4px', fontSize: '0.875rem' }}>
                 {state.error}
@@ -51,8 +106,12 @@ export default function SignupPage() {
                 name="password" 
                 type="password" 
                 required 
-                style={{ width: '100%', padding: '0.75rem', border: '1px solid var(--border-subtle)', borderRadius: '4px', fontSize: '1rem' }}
+                value={password}
+                onChange={handlePasswordChange}
+                onBlur={handlePasswordChange}
+                style={getInputStyle('password')}
               />
+              {fieldErrors.password && <div style={{ color: '#d32f2f', fontSize: '0.75rem' }}>{fieldErrors.password}</div>}
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -64,8 +123,12 @@ export default function SignupPage() {
                 name="confirm_password" 
                 type="password" 
                 required 
-                style={{ width: '100%', padding: '0.75rem', border: '1px solid var(--border-subtle)', borderRadius: '4px', fontSize: '1rem' }}
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                onBlur={handleConfirmPasswordChange}
+                style={getInputStyle('confirm_password')}
               />
+              {fieldErrors.confirm_password && <div style={{ color: '#d32f2f', fontSize: '0.75rem' }}>{fieldErrors.confirm_password}</div>}
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
