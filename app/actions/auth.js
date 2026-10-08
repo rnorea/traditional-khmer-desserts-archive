@@ -31,6 +31,13 @@ export async function signup(prevState, formData) {
     return { error: 'You must agree to the terms and conditions' };
   }
 
+  const password = formData.get('password');
+  const confirmPassword = formData.get('confirm_password');
+
+  if (password !== confirmPassword) {
+    return { error: 'Passwords do not match' };
+  }
+
   let username = formData.get('username');
   if (!username || username.trim() === '') {
     username = 'user_' + Math.random().toString(36).substring(2, 10);
@@ -38,12 +45,11 @@ export async function signup(prevState, formData) {
 
   const data = {
     email: formData.get('email'),
-    password: formData.get('password'),
+    password: password,
     options: {
       data: {
         username: username,
-        full_name: formData.get('full_name') || '',
-        organization: formData.get('organization') || ''
+        full_name: formData.get('full_name') || ''
       }
     }
   };
