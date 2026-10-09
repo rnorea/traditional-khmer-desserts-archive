@@ -26,6 +26,7 @@ export default function DessertDetail() {
   const [bannerVisible, setBannerVisible] = useState(false);
   const [recipeVisible, setRecipeVisible] = useState(false);
   const [suggestionsVisible, setSuggestionsVisible] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -187,7 +188,12 @@ export default function DessertDetail() {
           <div
             ref={bannerRef}
             className={`sheet-banner detail-banner-animate ${bannerVisible ? "is-visible" : ""}`}
-            style={{ backgroundImage: `url(${imageUrl})` }}
+            style={{ backgroundImage: `url(${imageUrl})`, cursor: 'zoom-in' }}
+            onClick={(e) => {
+              if (e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') {
+                setShowImageModal(true);
+              }
+            }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -248,6 +254,53 @@ export default function DessertDetail() {
           </div>
         )}
       </main>
+
+      {showImageModal && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'zoom-out'
+          }}
+          onClick={() => setShowImageModal(false)}
+        >
+          <img 
+            src={imageUrl} 
+            alt={displayName} 
+            style={{
+              maxWidth: '90%',
+              maxHeight: '90%',
+              objectFit: 'contain',
+              borderRadius: '4px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.5)'
+            }} 
+          />
+          <button
+            style={{
+              position: 'absolute',
+              top: '20px',
+              right: '20px',
+              background: 'none',
+              border: 'none',
+              color: 'white',
+              fontSize: '2rem',
+              cursor: 'pointer',
+              padding: '10px'
+            }}
+            onClick={() => setShowImageModal(false)}
+          >
+            &times;
+          </button>
+        </div>
+      )}
 
       <Footer language={language} />
     </>

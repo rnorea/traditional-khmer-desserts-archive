@@ -46,6 +46,14 @@ export default function EditEntryPage() {
     }
     
     loadData();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session?.user) {
+        router.push(`/${language}/login`);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, [language, router, entryId]);
 
   const validateField = (name, value) => {
