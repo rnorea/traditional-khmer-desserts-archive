@@ -7,6 +7,7 @@ import Navbar from '../../../components/Navbar.js';
 import Footer from '../../../components/Footer.js';
 import { deleteEntry } from '../../actions/entries.js';
 import { createClient } from '../../../utils/supabase/client.js';
+import { t } from '../../../data/translations.js';
 
 export default function MyArchivePage() {
   const params = useParams();
@@ -15,6 +16,8 @@ export default function MyArchivePage() {
   
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState("grid");
+  const text = t[language] || t.en;
 
   useEffect(() => {
     const supabase = createClient();
@@ -67,7 +70,7 @@ export default function MyArchivePage() {
     );
   }
 
-  const containerStyle = { width: '100%', maxWidth: '800px', backgroundColor: '#fff', padding: '2.5rem', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', marginBottom: '1.5rem' };
+  const containerStyle = { width: '100%', maxWidth: '1200px', backgroundColor: '#fff', padding: '2.5rem', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', marginBottom: '1.5rem' };
 
   return (
     <>
@@ -79,15 +82,91 @@ export default function MyArchivePage() {
             <h2 style={{ fontSize: '1.5rem', color: 'var(--green-primary)', margin: 0 }}>
               {language === 'en' ? 'My Archive' : 'បណ្ណសាររបស់ខ្ញុំ'}
             </h2>
-            <Link href={`/${language}/contribute`} className="btn-cta-primary" style={{ padding: '0.5rem 1rem', textDecoration: 'none' }}>
-              {language === 'en' ? 'Add New Entry' : 'បន្ថែមឯកសារថ្មី'}
-            </Link>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button 
+                  className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`} 
+                  onClick={() => setViewMode('grid')}
+                  title="Grid View"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                </button>
+                <button 
+                  className={`view-btn ${viewMode === 'list' ? 'active' : ''}`} 
+                  onClick={() => setViewMode('list')}
+                  title="List View"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                </button>
+              </div>
+              <Link href={`/${language}/contribute`} className="btn-cta-primary" style={{ padding: '0.5rem 1rem', textDecoration: 'none' }}>
+                {language === 'en' ? 'Add New Entry' : 'បន្ថែមឯកសារថ្មី'}
+              </Link>
+            </div>
           </div>
 
           {entries.length === 0 ? (
             <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '2rem 0' }}>
               {language === 'en' ? "You haven't added any entries yet." : 'អ្នកមិនទាន់បានបន្ថែមឯកសារណាមួយនៅឡើយទេ។'}
             </p>
+          ) : viewMode === 'grid' ? (
+            <div className="archive-grid">
+              {entries.map(entry => {
+                const displayName = language === 'kh' ? (entry.title_kh || entry.title_en) : entry.title_en;
+                const displayCategory = entry.category && text[entry.category] ? text[entry.category] : (language === 'kh' ? 'បង្អែម' : 'Desserts'); 
+                const displayDescription = language === 'kh' ? (entry.description_kh || entry.description_en) : entry.description_en;
+                
+                return (
+                  <div key={entry.id} className="archive-card">
+                    <div className="card-image-wrap">
+                      <span className="card-tag">{displayCategory}</span>
+                      {entry.status === 'published' ? (
+                        <Link href={`/${language}/archive/${entry.id}?from=my-archive`}>
+                          <img
+                            src={entry.image_url || "/images/dessert_placeholder.jpg"}
+                            alt={displayName}
+                          />
+                        </Link>
+                      ) : (
+                        <img
+                          src={entry.image_url || "/images/dessert_placeholder.jpg"}
+                          alt={displayName}
+                        />
+                      )}
+                    </div>
+                    <div className="card-body">
+                      <h3 className="card-title">{displayName}</h3>
+                      <p className="card-description">{displayDescription}</p>
+                      
+                      <div style={{ marginBottom: '1rem', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span>{new Date(entry.created_at).toLocaleDateString()}</span>
+                        <span style={{ 
+                          color: entry.status === 'published' ? 'var(--green-primary)' : 
+                                 entry.status === 'rejected' ? '#d32f2f' : '#f57c00',
+                          fontWeight: 600
+                        }}>
+                          {entry.status.toUpperCase()}
+                        </span>
+                      </div>
+
+                      <div className="card-footer" style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '0.8rem', display: 'flex', justifyContent: 'space-between', marginTop: 'auto' }}>
+                        {entry.status === 'published' && (
+                          <Link href={`/${language}/archive/${entry.id}?from=my-archive`} className="btn-ghost-gold" style={{ padding: '0.25rem 0.5rem', textDecoration: 'none', fontSize: '0.85rem' }}>
+                            {language === 'en' ? 'View' : 'មើល'}
+                          </Link>
+                        )}
+                        <Link href={`/${language}/edit-entry/${entry.id}`} className="btn-ghost-gold" style={{ padding: '0.25rem 0.5rem', textDecoration: 'none', fontSize: '0.85rem' }}>
+                          {language === 'en' ? 'Edit' : 'កែប្រែ'}
+                        </Link>
+                        <button onClick={() => handleDeleteEntry(entry.id)} className="btn-ghost-gold" style={{ padding: '0.25rem 0.5rem', color: '#d32f2f', fontSize: '0.85rem' }}>
+                          {language === 'en' ? 'Delete' : 'លុប'}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {entries.map(entry => (
@@ -109,7 +188,7 @@ export default function MyArchivePage() {
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     {entry.status === 'published' && (
-                      <Link href={`/${language}/archive/${entry.id}`} className="btn-ghost-gold" style={{ padding: '0.5rem 1rem', textDecoration: 'none' }}>
+                      <Link href={`/${language}/archive/${entry.id}?from=my-archive`} className="btn-ghost-gold" style={{ padding: '0.5rem 1rem', textDecoration: 'none' }}>
                         {language === 'en' ? 'View' : 'មើល'}
                       </Link>
                     )}

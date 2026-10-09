@@ -28,6 +28,19 @@ export default function DessertDetail() {
   const [suggestionsVisible, setSuggestionsVisible] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
 
+  const [backLink, setBackLink] = useState(`/${language}/archive`);
+  const [backText, setBackText] = useState(language === 'en' ? 'Back to Archive' : 'ត្រឡប់ទៅបណ្ណសារវិញ');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const searchParams = new URLSearchParams(window.location.search);
+      if (searchParams.get('from') === 'my-archive') {
+        setBackLink(`/${language}/my-archive`);
+        setBackText(language === 'en' ? 'Back to My Archive' : 'ត្រឡប់ទៅបណ្ណសាររបស់ខ្ញុំវិញ');
+      }
+    }
+  }, [language]);
+
   useEffect(() => {
     const fetchData = async () => {
       if (params?.id) {
@@ -163,9 +176,9 @@ export default function DessertDetail() {
       
       <main className="container" style={{ paddingTop: '100px', minHeight: '80vh' }}>
         <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-          <Link href={`/${language}/archive`} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: 600 }}>
+          <Link href={backLink} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: 600 }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-            {language === 'en' ? 'Back to Archive' : 'ត្រឡប់ទៅបណ្ណសារវិញ'}
+            {backText}
           </Link>
 
           {currentUser && currentUser.id === dessert.author_id && (
