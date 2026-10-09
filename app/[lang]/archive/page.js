@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import Navbar from "../../../components/Navbar.js";
 import ArchiveControls from "../../../components/ArchiveControls.js";
@@ -36,6 +36,39 @@ export default function ArchivePage() {
 
   const text = t[language] || t.en;
 
+  // Load state from sessionStorage on mount
+  useEffect(() => {
+    const savedState = sessionStorage.getItem('archiveState');
+    if (savedState) {
+      try {
+        const parsed = JSON.parse(savedState);
+        if (parsed.viewMode) setViewMode(parsed.viewMode);
+        if (parsed.searchQuery) setSearchQuery(parsed.searchQuery);
+        if (parsed.filterType) setFilterType(parsed.filterType);
+        if (parsed.sortType) setSortType(parsed.sortType);
+        if (parsed.currentPage) setCurrentPage(parsed.currentPage);
+        if (parsed.itemsPerPage) setItemsPerPage(parsed.itemsPerPage);
+      } catch (e) {}
+    }
+  }, []);
+
+  // Sync state to sessionStorage
+  const isInitialMount = useRef(true);
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    sessionStorage.setItem('archiveState', JSON.stringify({
+      viewMode,
+      searchQuery,
+      filterType,
+      sortType,
+      currentPage,
+      itemsPerPage
+    }));
+  }, [viewMode, searchQuery, filterType, sortType, currentPage, itemsPerPage]);
+
   useEffect(() => {
     const fetchEntries = async () => {
       const supabase = createClient();
@@ -51,8 +84,18 @@ export default function ArchivePage() {
     fetchEntries();
   }, []);
 
+  const prevFilters = useRef({ searchQuery, filterType, sortType, itemsPerPage });
   useEffect(() => {
-    setCurrentPage(1);
+    const prev = prevFilters.current;
+    if (
+      prev.searchQuery !== searchQuery || 
+      prev.filterType !== filterType || 
+      prev.sortType !== sortType || 
+      prev.itemsPerPage !== itemsPerPage
+    ) {
+      setCurrentPage(1);
+      prevFilters.current = { searchQuery, filterType, sortType, itemsPerPage };
+    }
   }, [searchQuery, filterType, sortType, itemsPerPage]);
 
   const suggestions = useMemo(() => {
