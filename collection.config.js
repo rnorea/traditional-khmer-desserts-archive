@@ -8,20 +8,20 @@
 
 const collection = {
   // What does your archive collect? e.g. "Khmer Proverbs"
-  name: "My Collection",
-  nameKm: "កម្រងឯកសាររបស់ខ្ញុំ",
+  name: "Traditional Khmer Desserts",
+  nameKm: "បង្អែមបុរាណខ្មែរ",
 
   // One sentence: what is this archive, and why does it matter?
-  description: "A living archive of a piece of Khmer culture, built for ICT 340.",
-  descriptionKm: "បណ្ណសាររស់រវើកនៃវប្បធម៌ខ្មែរ បង្កើតឡើងសម្រាប់មុខវិជ្ជា ICT 340។",
+  description: "A living digital archive preserving traditional Khmer confectionery, recipes, and culinary heritage across Cambodia.",
+  descriptionKm: "បណ្ណសារឌីជីថលរស់រវើកដែលចូលរួមអភិរក្សបង្អែមបុរាណ រូបមន្ត និងកេរដំណែលម្ហូបអាហារខ្មែរនៅទូទាំងប្រទេសកម្ពុជា។",
 
   // Who is building this archive? Your name, as you want it shown.
   curator: "ROTH Noreasakpheak",
   curatorKm: "សភៈ",
 
   // Where does your knowledge come from? A person, a place, a community.
-  source: "To be gathered",
-  sourceKm: "រៀបចំប្រមូលផ្ដុំ",
+  source: "Local Confectioners & Community Elders",
+  sourceKm: "អ្នកជំនាញធ្វើបង្អែម និងចាស់ព្រឹទ្ធាចារ្យតាមមូលដ្ឋាន",
 };
 
 export default collection;
