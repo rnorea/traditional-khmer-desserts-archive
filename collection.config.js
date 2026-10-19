@@ -8,8 +8,8 @@
 
 const collection = {
   // What does your archive collect? e.g. "Khmer Proverbs"
-  name: "Traditional Khmer Desserts",
-  nameKm: "បង្អែមបុរាណខ្មែរ",
+  name: "Khmer Desserts Archive",
+  nameKm: "បណ្ណសារបង្អែមបុរាណខ្មែរ",
 
   // One sentence: what is this archive, and why does it matter?
   description: "A living digital archive preserving traditional Khmer confectionery, recipes, and culinary heritage across Cambodia.",
