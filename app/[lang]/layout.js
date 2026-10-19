@@ -2,7 +2,7 @@ import "../globals.css";
 import collection from "../../collection.config.js";
 
 export const metadata = {
-  title: `${collection.name} — Khmer Living Archive`,
+  title: "Khmer desserts archive",
   description: collection.description,
 };
 

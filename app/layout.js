@@ -3,7 +3,7 @@ import collection from "../collection.config.js";
 import { cookies } from "next/headers";
 
 export const metadata = {
-  title: `${collection.name} — Khmer Living Archive`,
+  title: "Khmer desserts archive",
   description: collection.description,
 };
 
