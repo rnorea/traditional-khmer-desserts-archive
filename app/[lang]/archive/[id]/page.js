@@ -54,7 +54,6 @@ export default function DessertDetail() {
           .from('entries')
           .select('*, profiles(full_name)')
           .eq('id', params.id)
-          .eq('status', 'published')
           .single();
           
         if (found) {
@@ -196,6 +195,60 @@ export default function DessertDetail() {
             </div>
           )}
         </div>
+
+        {dessert.status !== 'published' && (
+          <div style={{
+            backgroundColor: dessert.status === 'returned' ? '#ffebee' : '#fff3e0',
+            border: `1px solid ${dessert.status === 'returned' ? '#ffcdd2' : '#ffe0b2'}`,
+            color: dessert.status === 'returned' ? '#c62828' : '#e65100',
+            padding: '1rem 1.5rem',
+            borderRadius: '8px',
+            marginBottom: '1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '12px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{
+                backgroundColor: dessert.status === 'returned' ? '#c62828' : '#e65100',
+                color: '#fff',
+                padding: '4px 10px',
+                borderRadius: '12px',
+                fontSize: '0.8rem',
+                fontWeight: 700
+              }}>
+                {dessert.status === 'returned' 
+                  ? (language === 'kh' ? 'បានបញ្ជូនត្រឡប់' : 'Returned')
+                  : (language === 'kh' ? 'រង់ចាំការពិនិត្យ' : 'Pending review')}
+              </span>
+              <span style={{ fontSize: '0.92rem', fontWeight: 500 }}>
+                {language === 'kh'
+                  ? 'ឯកសារនេះមិនទាន់ត្រូវបានផ្សព្វផ្សាយជាសាធារណៈទេ។ មានតែអ្នក និងអ្នកត្រួតពិនិត្យប៉ុណ្ណោះដែលអាចមើលឃើញ។'
+                  : 'This entry is not yet published to the public. Only you and reviewers can see it.'}
+              </span>
+            </div>
+            {currentUser && currentUser.id === dessert.author_id && (
+              <Link
+                href={`/${language}/edit-entry/${dessert.id}`}
+                className="btn-secondary"
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '4px',
+                  textDecoration: 'none',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  backgroundColor: '#fff',
+                  border: '1px solid var(--border-subtle)',
+                  color: 'inherit'
+                }}
+              >
+                {language === 'kh' ? 'កែប្រែឯកសារ' : 'Edit Entry'}
+              </Link>
+            )}
+          </div>
+        )}
 
         <div className="card-sheet">
           <div

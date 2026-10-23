@@ -17,6 +17,7 @@ export default function MyArchivePage() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState("grid");
+  const [statusFilter, setStatusFilter] = useState("all");
   const text = t[language] || t.en;
 
   useEffect(() => {
@@ -58,6 +59,43 @@ export default function MyArchivePage() {
     }
   };
 
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'published':
+        return {
+          label: language === 'kh' ? 'បានផ្សព្វផ្សាយ' : 'Published',
+          color: 'var(--green-primary)',
+          bg: '#e8f5e9',
+          border: '#c8e6c9'
+        };
+      case 'returned':
+        return {
+          label: language === 'kh' ? 'បានបញ្ជូនត្រឡប់' : 'Returned',
+          color: '#c62828',
+          bg: '#ffebee',
+          border: '#ffcdd2'
+        };
+      case 'pending':
+      default:
+        return {
+          label: language === 'kh' ? 'រង់ចាំការពិនិត្យ' : 'Pending review',
+          color: '#e65100',
+          bg: '#fff3e0',
+          border: '#ffe0b2'
+        };
+    }
+  };
+
+  const filteredEntries = entries.filter(entry => {
+    if (statusFilter === 'all') return true;
+    if (statusFilter === 'pending') return entry.status === 'pending';
+    if (statusFilter === 'published') return entry.status === 'published';
+    return true;
+  });
+
+  const pendingCount = entries.filter(e => e.status === 'pending').length;
+  const publishedCount = entries.filter(e => e.status === 'published').length;
+
   if (loading) {
     return (
       <>
@@ -78,7 +116,7 @@ export default function MyArchivePage() {
       
       <main className="container" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '4rem 2rem' }}>
         <div style={containerStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
             <h2 style={{ fontSize: '1.5rem', color: 'var(--green-primary)', margin: 0 }}>
               {language === 'en' ? 'My Archive' : 'បណ្ណសាររបស់ខ្ញុំ'}
             </h2>
@@ -105,34 +143,85 @@ export default function MyArchivePage() {
             </div>
           </div>
 
-          {entries.length === 0 ? (
+          {/* Status Filter */}
+          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.75rem', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => setStatusFilter('all')}
+              style={{
+                padding: '0.45rem 1rem',
+                borderRadius: '20px',
+                border: '1px solid',
+                borderColor: statusFilter === 'all' ? 'var(--green-primary)' : 'var(--border-subtle)',
+                backgroundColor: statusFilter === 'all' ? 'var(--green-primary)' : '#fff',
+                color: statusFilter === 'all' ? '#fff' : 'var(--text-secondary)',
+                fontSize: '0.875rem',
+                cursor: 'pointer',
+                fontWeight: 500,
+                transition: 'all 0.2s ease'
+              }}
+            >
+              {language === 'en' ? 'All' : 'ទាំងអស់'} ({entries.length})
+            </button>
+            <button
+              onClick={() => setStatusFilter('pending')}
+              style={{
+                padding: '0.45rem 1rem',
+                borderRadius: '20px',
+                border: '1px solid',
+                borderColor: statusFilter === 'pending' ? '#e65100' : 'var(--border-subtle)',
+                backgroundColor: statusFilter === 'pending' ? '#fff3e0' : '#fff',
+                color: statusFilter === 'pending' ? '#e65100' : 'var(--text-secondary)',
+                fontSize: '0.875rem',
+                cursor: 'pointer',
+                fontWeight: 500,
+                transition: 'all 0.2s ease'
+              }}
+            >
+              {language === 'en' ? 'Pending review' : 'រង់ចាំការពិនិត្យ'} ({pendingCount})
+            </button>
+            <button
+              onClick={() => setStatusFilter('published')}
+              style={{
+                padding: '0.45rem 1rem',
+                borderRadius: '20px',
+                border: '1px solid',
+                borderColor: statusFilter === 'published' ? 'var(--green-primary)' : 'var(--border-subtle)',
+                backgroundColor: statusFilter === 'published' ? '#e8f5e9' : '#fff',
+                color: statusFilter === 'published' ? 'var(--green-primary)' : 'var(--text-secondary)',
+                fontSize: '0.875rem',
+                cursor: 'pointer',
+                fontWeight: 500,
+                transition: 'all 0.2s ease'
+              }}
+            >
+              {language === 'en' ? 'Published' : 'បានផ្សព្វផ្សាយ'} ({publishedCount})
+            </button>
+          </div>
+
+          {filteredEntries.length === 0 ? (
             <p style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '2rem 0' }}>
-              {language === 'en' ? "You haven't added any entries yet." : 'អ្នកមិនទាន់បានបន្ថែមឯកសារណាមួយនៅឡើយទេ។'}
+              {statusFilter === 'all'
+                ? (language === 'en' ? "You haven't added any entries yet." : 'អ្នកមិនទាន់បានបន្ថែមឯកសារណាមួយនៅឡើយទេ។')
+                : (language === 'en' ? 'No entries found for this status.' : 'មិនមានឯកសារសម្រាប់ស្ថានភាពនេះទេ។')}
             </p>
           ) : viewMode === 'grid' ? (
             <div className="archive-grid">
-              {entries.map(entry => {
+              {filteredEntries.map(entry => {
                 const displayName = language === 'kh' ? (entry.title_kh || entry.title_en) : entry.title_en;
                 const displayCategory = entry.category && text[entry.category] ? text[entry.category] : (language === 'kh' ? 'បង្អែម' : 'Desserts'); 
                 const displayDescription = language === 'kh' ? (entry.description_kh || entry.description_en) : entry.description_en;
+                const badge = getStatusBadge(entry.status);
                 
                 return (
                   <div key={entry.id} className="archive-card">
                     <div className="card-image-wrap">
                       <span className="card-tag">{displayCategory}</span>
-                      {entry.status === 'published' ? (
-                        <Link href={`/${language}/archive/${entry.id}?from=my-archive`}>
-                          <img
-                            src={entry.image_url || "/images/dessert_placeholder.jpg"}
-                            alt={displayName}
-                          />
-                        </Link>
-                      ) : (
+                      <Link href={`/${language}/archive/${entry.id}?from=my-archive`}>
                         <img
                           src={entry.image_url || "/images/dessert_placeholder.jpg"}
                           alt={displayName}
                         />
-                      )}
+                      </Link>
                     </div>
                     <div className="card-body">
                       <h3 className="card-title">{displayName}</h3>
@@ -141,20 +230,22 @@ export default function MyArchivePage() {
                       <div style={{ marginBottom: '1rem', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span>{new Date(entry.created_at).toLocaleDateString()}</span>
                         <span style={{ 
-                          color: entry.status === 'published' ? 'var(--green-primary)' : 
-                                 entry.status === 'rejected' ? '#d32f2f' : '#f57c00',
+                          color: badge.color,
+                          backgroundColor: badge.bg,
+                          border: `1px solid ${badge.border}`,
+                          padding: '0.2rem 0.55rem',
+                          borderRadius: '12px',
+                          fontSize: '0.8rem',
                           fontWeight: 600
                         }}>
-                          {entry.status.toUpperCase()}
+                          {badge.label}
                         </span>
                       </div>
 
                       <div className="card-footer" style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '0.8rem', display: 'flex', justifyContent: 'space-between', marginTop: 'auto' }}>
-                        {entry.status === 'published' && (
-                          <Link href={`/${language}/archive/${entry.id}?from=my-archive`} className="btn-ghost-gold" style={{ padding: '0.25rem 0.5rem', textDecoration: 'none', fontSize: '0.85rem' }}>
-                            {language === 'en' ? 'View' : 'មើល'}
-                          </Link>
-                        )}
+                        <Link href={`/${language}/archive/${entry.id}?from=my-archive`} className="btn-ghost-gold" style={{ padding: '0.25rem 0.5rem', textDecoration: 'none', fontSize: '0.85rem' }}>
+                          {language === 'en' ? 'View' : 'មើល'}
+                        </Link>
                         <Link href={`/${language}/edit-entry/${entry.id}`} className="btn-ghost-gold" style={{ padding: '0.25rem 0.5rem', textDecoration: 'none', fontSize: '0.85rem' }}>
                           {language === 'en' ? 'Edit' : 'កែប្រែ'}
                         </Link>
@@ -169,38 +260,43 @@ export default function MyArchivePage() {
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {entries.map(entry => (
-                <div key={entry.id} style={{ border: '1px solid var(--border-subtle)', borderRadius: '8px', padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div>
-                    <h3 style={{ margin: '0 0 0.25rem 0', fontSize: '1.1rem', color: '#333' }}>
-                      {language === 'en' ? entry.title_en : entry.title_kh}
-                    </h3>
-                    <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', gap: '12px' }}>
-                      <span>{new Date(entry.created_at).toLocaleDateString()}</span>
-                      <span style={{ 
-                        color: entry.status === 'published' ? 'var(--green-primary)' : 
-                               entry.status === 'rejected' ? '#d32f2f' : '#f57c00',
-                        fontWeight: 500
-                      }}>
-                        {entry.status.toUpperCase()}
-                      </span>
+              {filteredEntries.map(entry => {
+                const badge = getStatusBadge(entry.status);
+                return (
+                  <div key={entry.id} style={{ border: '1px solid var(--border-subtle)', borderRadius: '8px', padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <h3 style={{ margin: '0 0 0.25rem 0', fontSize: '1.1rem', color: '#333' }}>
+                        {language === 'en' ? entry.title_en : entry.title_kh}
+                      </h3>
+                      <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', gap: '12px', alignItems: 'center' }}>
+                        <span>{new Date(entry.created_at).toLocaleDateString()}</span>
+                        <span style={{ 
+                          color: badge.color,
+                          backgroundColor: badge.bg,
+                          border: `1px solid ${badge.border}`,
+                          padding: '0.2rem 0.55rem',
+                          borderRadius: '12px',
+                          fontSize: '0.8rem',
+                          fontWeight: 600
+                        }}>
+                          {badge.label}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    {entry.status === 'published' && (
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <Link href={`/${language}/archive/${entry.id}?from=my-archive`} className="btn-ghost-gold" style={{ padding: '0.5rem 1rem', textDecoration: 'none' }}>
                         {language === 'en' ? 'View' : 'មើល'}
                       </Link>
-                    )}
-                    <Link href={`/${language}/edit-entry/${entry.id}`} className="btn-ghost-gold" style={{ padding: '0.5rem 1rem', textDecoration: 'none' }}>
-                      {language === 'en' ? 'Edit' : 'កែប្រែ'}
-                    </Link>
-                    <button onClick={() => handleDeleteEntry(entry.id)} className="btn-ghost-gold" style={{ padding: '0.5rem 1rem', color: '#d32f2f' }}>
-                      {language === 'en' ? 'Delete' : 'លុប'}
-                    </button>
+                      <Link href={`/${language}/edit-entry/${entry.id}`} className="btn-ghost-gold" style={{ padding: '0.5rem 1rem', textDecoration: 'none' }}>
+                        {language === 'en' ? 'Edit' : 'កែប្រែ'}
+                      </Link>
+                      <button onClick={() => handleDeleteEntry(entry.id)} className="btn-ghost-gold" style={{ padding: '0.5rem 1rem', color: '#d32f2f' }}>
+                        {language === 'en' ? 'Delete' : 'លុប'}
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
