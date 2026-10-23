@@ -205,25 +205,42 @@ export default function EditEntryPage() {
         imageUrl = publicUrlData.publicUrl;
       }
 
+      // Check if user is a reviewer
+      let isReviewer = false;
+      try {
+        const { data: reviewerData, error: rpcError } = await supabase.rpc('is_reviewer');
+        if (!rpcError && reviewerData === true) {
+          isReviewer = true;
+        }
+      } catch (e) {
+        isReviewer = false;
+      }
+
+      const updatePayload = {
+        title_en: data.title_en,
+        title_kh: data.title_kh,
+        description_en: data.description_en,
+        description_kh: data.description_kh,
+        ingredients_en: data.ingredients_en,
+        ingredients_kh: data.ingredients_kh,
+        instructions_en: data.instructions_en,
+        instructions_kh: data.instructions_kh,
+        category: data.category,
+        region_en: data.region_en || null,
+        region_kh: data.region_kh || null,
+        source_en: data.source_en || null,
+        source_kh: data.source_kh || null,
+        image_url: imageUrl,
+      };
+
+      if (!isReviewer) {
+        updatePayload.status = 'pending';
+      }
+
       // Update entry
       const { data: updateData, error: updateError } = await supabase
         .from('entries')
-        .update({
-          title_en: data.title_en,
-          title_kh: data.title_kh,
-          description_en: data.description_en,
-          description_kh: data.description_kh,
-          ingredients_en: data.ingredients_en,
-          ingredients_kh: data.ingredients_kh,
-          instructions_en: data.instructions_en,
-          instructions_kh: data.instructions_kh,
-          category: data.category,
-          region_en: data.region_en || null,
-          region_kh: data.region_kh || null,
-          source_en: data.source_en || null,
-          source_kh: data.source_kh || null,
-          image_url: imageUrl,
-        })
+        .update(updatePayload)
         .eq('id', entry.id)
         .select();
 

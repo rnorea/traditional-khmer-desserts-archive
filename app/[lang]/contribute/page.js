@@ -17,6 +17,7 @@ export default function ContributePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
+  const [submittedEntry, setSubmittedEntry] = useState(null);
 
   useEffect(() => {
     const supabase = createClient();
@@ -245,8 +246,7 @@ export default function ContributePage() {
           source_en: data.source_en || null,
           source_kh: data.source_kh || null,
           image_url: imageUrl,
-          author_id: user.id,
-          status: 'published'
+          author_id: user.id
         })
         .select()
         .single();
@@ -280,7 +280,8 @@ export default function ContributePage() {
         return;
       }
 
-      router.push(`/${language}/archive/${insertData.id}`);
+      setSubmittedEntry(insertData);
+      setIsSubmitting(false);
 
     } catch (err) {
       console.error('Unexpected error:', err);
@@ -292,11 +293,80 @@ export default function ContributePage() {
   const labelStyle = { fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', display: 'block', fontWeight: '500' };
   const errorStyle = { color: '#d32f2f', fontSize: '0.75rem', marginTop: '0.25rem' };
 
+  if (submittedEntry) {
+    return (
+      <>
+        <Navbar language={language} />
+        <main className="container" style={{ minHeight: '80vh', padding: '4rem 2rem' }}>
+          <div style={{ maxWidth: '720px', margin: '0 auto', backgroundColor: '#fff', padding: '2.5rem', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', textAlign: 'center' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '60px', height: '60px', borderRadius: '50%', backgroundColor: '#e8f5e9', color: 'var(--green-primary)', marginBottom: '1.5rem' }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+
+            <h1 style={{ fontSize: '1.8rem', color: 'var(--green-primary)', marginBottom: '1rem', fontFamily: 'var(--font-serif)' }}>
+              {language === 'en' ? 'Entry Submitted!' : 'បានបញ្ជូនឯកសារដោយជោគជ័យ!'}
+            </h1>
+
+            <div style={{ display: 'inline-block', backgroundColor: '#fff3e0', color: '#e65100', border: '1px solid #ffe0b2', padding: '0.4rem 1rem', borderRadius: '20px', fontWeight: 600, fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+              ● {language === 'en' ? 'Pending review' : 'រង់ចាំការពិនិត្យ'}
+            </div>
+
+            <div style={{ backgroundColor: '#fcfaf5', border: '1px solid var(--border-subtle)', borderRadius: '8px', padding: '1.5rem', textAlign: 'left', marginBottom: '2rem', lineHeight: 1.65 }}>
+              <p style={{ margin: 0, color: 'var(--text-main)', fontSize: '0.98rem' }}>
+                {language === 'en' 
+                  ? 'They should see a clear “Pending review” label on the entry. Only they and reviewers can see it, and it doesn’t appear to the public until it’s approved. While it waits, they can still edit it, and they can see that it hasn’t been published yet.'
+                  : 'ពួកគេគួរតែឃើញស្លាក «រង់ចាំការពិនិត្យ» យ៉ាងច្បាស់នៅលើឯកសារ។ មានតែពួកគេ និងអ្នកត្រួតពិនិត្យប៉ុណ្ណោះដែលអាចមើលឃើញវា ហើយវាមិនបង្ហាញជាសាធារណៈរហូតដល់ត្រូវបានអនុម័ត។ ក្នុងអំឡុងពេលរង់ចាំ ពួកគេនៅតែអាចកែប្រែវាបាន ហើយពួកគេអាចមើលឃើញថាវាមិនទាន់ត្រូវបានផ្សព្វផ្សាយនៅឡើយទេ។'}
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link href={`/${language}/my-archive`} className="btn-cta-primary" style={{ textDecoration: 'none', padding: '0.75rem 1.5rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                {language === 'en' ? 'Go to My Archive' : 'ទៅកាន់បណ្ណសាររបស់ខ្ញុំ'}
+              </Link>
+              <button 
+                type="button"
+                onClick={() => setSubmittedEntry(null)} 
+                className="btn-ghost-gold" 
+                style={{ padding: '0.75rem 1.5rem', cursor: 'pointer' }}
+              >
+                {language === 'en' ? 'Submit Another Entry' : 'បញ្ជូនឯកសារផ្សេងទៀត'}
+              </button>
+            </div>
+          </div>
+        </main>
+        <Footer language={language} />
+      </>
+    );
+  }
+
   return (
     <>
       <Navbar language={language} />
       
       <main className="container" style={{ minHeight: '80vh', padding: '4rem 2rem' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto 1.5rem auto' }}>
+          <Link 
+            href={`/${language}/my-archive`} 
+            style={{ 
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              gap: '8px', 
+              color: 'var(--text-secondary)', 
+              textDecoration: 'none', 
+              fontWeight: 600,
+              fontSize: '0.95rem' 
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            {language === 'en' ? 'Back to My Archive' : 'ត្រឡប់ទៅបណ្ណសាររបស់ខ្ញុំ'}
+          </Link>
+        </div>
+
         <div style={{ maxWidth: '800px', margin: '0 auto', backgroundColor: '#fff', padding: '2.5rem', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
           <h1 style={{ fontSize: '2rem', color: 'var(--green-primary)', marginBottom: '2rem', textAlign: 'center', fontFamily: 'var(--font-serif)' }}>
             {language === 'en' ? 'Contribute an Entry' : 'ចូលរួមឯកសារ'}

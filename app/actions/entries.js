@@ -47,7 +47,6 @@ export async function addEntry(prevState, formData) {
       region_kh,
       source_en,
       source_kh,
-      status: 'published',
       author_id: user.id
     }]);
 
