@@ -54,7 +54,20 @@ export const t = {
     ourStory: "The Story",
     storyText: "Khmer cuisine carries centuries of rich history, yet many traditional dessert recipes remain undocumented and risk being lost over time. This project was born from a desire to digitally archive these culinary treasures, ensuring that the sweet heritage of Cambodia is celebrated and kept alive.",
     aboutMe: "About Me",
-    aboutMeText: "Curated by ROTH Noreasakpheak as part of the ICT 340 course. I am passionate about leveraging technology to document and preserve the cultural identity embedded in Cambodian food."
+    aboutMeText: "Curated by ROTH Noreasakpheak as part of the ICT 340 course. I am passionate about leveraging technology to document and preserve the cultural identity embedded in Cambodian food.",
+
+    review: "Review",
+    reviewQueueTitle: "Review Queue",
+    reviewSubtitle: "Evaluate pending submissions for authenticity and completeness before publishing.",
+    approve: "Approve",
+    returnBtn: "Return",
+    submittedBy: "Submitted by",
+    submittedOn: "Submitted on",
+    ingredients: "Ingredients",
+    instructions: "Instructions",
+    emptyQueue: "No pending submissions to review. All entries have been processed.",
+    actionFailed: "Failed to update entry status. Please check your connection and try again.",
+    accessRestricted: "Access restricted. You must be an administrator/reviewer to view the review queue."
   },
   kh: {
     brand: "បណ្ណសារបង្អែមខ្មែរ",
@@ -111,6 +124,19 @@ export const t = {
     ourStory: "សាច់រឿង",
     storyText: "បង្អែមខ្មែរមានប្រវត្តិដ៏សម្បូរបែបតាំងពីរាប់រយឆ្នាំមកហើយ ប៉ុន្តែរូបមន្តបង្អែមជាច្រើននៅតែមិនមានការកត់ត្រា ហើយប្រឈមនឹងការបាត់បង់ទៅតាមពេលវេលា។ គម្រោងនេះកើតចេញពីបំណងប្រាថ្នាក្នុងការចងក្រងកេរដំណែលទាំងនេះជាឯកសារឌីជីថល ដើម្បីធានាថាកេរដំណែលដ៏ផ្អែមល្ហែមរបស់កម្ពុជានឹងត្រូវបានប្រារព្ធ និងរក្សាទុកជារៀងរហូត។",
     aboutMe: "អំពីខ្ញុំ",
-    aboutMeText: "រៀបចំដោយ សភៈ ជាផ្នែកមួយនៃថ្នាក់ ICT 340។ ខ្ញុំមានចំណង់ចំណូលចិត្តក្នុងការប្រើប្រាស់បច្ចេកវិទ្យាដើម្បីចងក្រង និងអភិរក្សអត្តសញ្ញាណវប្បធម៌ដែលបង្កប់នៅក្នុងម្ហូបអាហារកម្ពុជា។"
+    aboutMeText: "រៀបចំដោយ សភៈ ជាផ្នែកមួយនៃថ្នាក់ ICT 340។ ខ្ញុំមានចំណង់ចំណូលចិត្តក្នុងការប្រើប្រាស់បច្ចេកវិទ្យាដើម្បីចងក្រង និងអភិរក្សអត្តសញ្ញាណវប្បធម៌ដែលបង្កប់នៅក្នុងម្ហូបអាហារកម្ពុជា។",
+
+    review: "ត្រួតពិនិត្យ",
+    reviewQueueTitle: "ជួរត្រួតពិនិត្យកំណត់ត្រា",
+    reviewSubtitle: "ពិនិត្យមើលភាពត្រឹមត្រូវ និងភាពពេញលេញនៃសំណើមុននឹងបោះពុម្ពផ្សាយ។",
+    approve: "អនុម័ត",
+    returnBtn: "ប្រគល់ត្រឡប់",
+    submittedBy: "ដាក់ស្នើដោយ",
+    submittedOn: "កាលបរិច្ឆេទដាក់ស្នើ",
+    ingredients: "គ្រឿងផ្សំ",
+    instructions: "របៀបធ្វើ",
+    emptyQueue: "មិនមានសំណើរង់ចាំការត្រួតពិនិត្យទេ។ រាល់កំណត់ត្រាទាំងអស់ត្រូវបានដំណើរការរួចរាល់។",
+    actionFailed: "មិនអាចធ្វើបច្ចុប្បន្នភាពស្ថានភាពកំណត់ត្រាបានទេ។ សូមពិនិត្យការតភ្ជាប់ ហើយព្យាយាមម្តងទៀត។",
+    accessRestricted: "ការចូលប្រើត្រូវបានកម្រិត។ អ្នកត្រូវតែជាអ្នកត្រួតពិនិត្យដើម្បីចូលមើលទំព័រនេះ។"
   }
 };

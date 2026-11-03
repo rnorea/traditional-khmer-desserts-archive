@@ -15,15 +15,32 @@ export default function Navbar({ language }) {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [isReviewer, setIsReviewer] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
+    const checkReviewer = async (currentUser) => {
+      if (!currentUser) {
+        setIsReviewer(false);
+        return;
+      }
+      try {
+        const { data } = await supabase.rpc('is_reviewer');
+        setIsReviewer(data === true);
+      } catch {
+        setIsReviewer(false);
+      }
+    };
+
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
+      checkReviewer(user);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+      checkReviewer(currentUser);
     });
 
     return () => subscription.unsubscribe();
@@ -132,6 +149,12 @@ export default function Navbar({ language }) {
                 )}
 
                 <Link href={`/${language}/about`} className={`nav-link ${pathname.includes('/about') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>{text.aboutProject}</Link>
+
+                {isReviewer && (
+                  <Link href="/review" className={`nav-link ${pathname.includes('/review') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+                    {text.review || (language === 'en' ? 'Review' : 'ត្រួតពិនិត្យ')}
+                  </Link>
+                )}
               </div>
 
               <div className="nav-actions" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
