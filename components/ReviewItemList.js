@@ -18,8 +18,9 @@ export default function ReviewItemList({ entry, language, onSelect, onReview, is
   const displayDescription = isKh ? (entry.description_kh || entry.description_en) : (entry.description_en || entry.description_kh);
   const submitter = entry.profiles?.full_name || entry.profiles?.username || (isKh ? 'អ្នកចូលរួម' : 'Contributor');
 
-  const approveStyle = { ...btnBase, backgroundColor: 'transparent', color: 'var(--green-primary, #436A0D)', border: '1.5px solid var(--green-primary, #436A0D)', cursor: isBusy ? 'not-allowed' : 'pointer' };
-  const returnStyle = { ...btnBase, backgroundColor: '#c62828', color: '#ffffff', border: '1.5px solid #c62828', cursor: isBusy ? 'not-allowed' : 'pointer' };
+  const isDisabled = isBusy || Boolean(error);
+  const approveStyle = { ...btnBase, backgroundColor: 'transparent', color: 'var(--green-primary, #436A0D)', border: '1.5px solid var(--green-primary, #436A0D)', cursor: isDisabled ? 'not-allowed' : 'pointer', opacity: isDisabled ? 0.5 : 1 };
+  const returnStyle = { ...btnBase, backgroundColor: '#c62828', color: '#ffffff', border: '1.5px solid #c62828', cursor: isDisabled ? 'not-allowed' : 'pointer', opacity: isDisabled ? 0.5 : 1 };
 
   return (
     <div style={{ marginBottom: '1.25rem', backgroundColor: '#fff', border: '1px solid var(--border-subtle)', borderRadius: '8px', overflow: 'hidden' }}>
@@ -45,12 +46,12 @@ export default function ReviewItemList({ entry, language, onSelect, onReview, is
 
         {/* Right side stacked buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: '105px', flexShrink: 0, justifyContent: 'center' }}>
-          <button onClick={(e) => { e.stopPropagation(); onReview(entry.id, 'published'); }} disabled={isBusy} style={approveStyle}>{isKh ? 'អនុម័ត' : 'Approve'}</button>
-          <button onClick={(e) => { e.stopPropagation(); onReview(entry.id, 'returned'); }} disabled={isBusy} style={returnStyle}>{isKh ? 'ប្រគល់ត្រឡប់' : 'Return'}</button>
+          <button onClick={(e) => { e.stopPropagation(); if (!isDisabled) onReview(entry.id, 'published'); }} disabled={isDisabled} style={approveStyle}>{isKh ? 'អនុម័ត' : 'Approve'}</button>
+          <button onClick={(e) => { e.stopPropagation(); if (!isDisabled) onReview(entry.id, 'returned'); }} disabled={isDisabled} style={returnStyle}>{isKh ? 'ប្រគល់ត្រឡប់' : 'Return'}</button>
         </div>
       </div>
 
-      {error && <div style={{ padding: '0.5rem 1rem', backgroundColor: '#fee2e2', color: '#b91c1c', fontSize: '0.85rem', textAlign: 'center' }}>{error}</div>}
+      {error && <div style={{ padding: '0.5rem 1rem', backgroundColor: '#fee2e2', color: '#b91c1c', fontSize: '0.85rem', textAlign: 'center', lineHeight: 1.4 }}>{error}</div>}
     </div>
   );
 }

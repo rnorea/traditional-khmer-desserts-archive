@@ -67,7 +67,9 @@ export const t = {
     instructions: "Instructions",
     emptyQueue: "No pending submissions to review. All entries have been processed.",
     actionFailed: "Failed to update entry status. Please check your connection and try again.",
-    accessRestricted: "Access restricted. You must be an administrator/reviewer to view the review queue."
+    actionConflict: "Unable to complete the action. This entry may have already been approved/returned by another reviewer. Please refresh and try again.",
+    accessRestricted: "Access Denied. You are not authorized to view this page. Please contact your administrator if you believe you should have access.",
+    backToHome: "Go to Homepage"
   },
   kh: {
     brand: "បណ្ណសារបង្អែមខ្មែរ",
@@ -137,6 +139,8 @@ export const t = {
     instructions: "របៀបធ្វើ",
     emptyQueue: "មិនមានសំណើរង់ចាំការត្រួតពិនិត្យទេ។ រាល់កំណត់ត្រាទាំងអស់ត្រូវបានដំណើរការរួចរាល់។",
     actionFailed: "មិនអាចធ្វើបច្ចុប្បន្នភាពស្ថានភាពកំណត់ត្រាបានទេ។ សូមពិនិត្យការតភ្ជាប់ ហើយព្យាយាមម្តងទៀត។",
-    accessRestricted: "ការចូលប្រើត្រូវបានកម្រិត។ អ្នកត្រូវតែជាអ្នកត្រួតពិនិត្យដើម្បីចូលមើលទំព័រនេះ។"
+    actionConflict: "មិនអាចបញ្ចប់សកម្មភាពនេះបានទេ។ កំណត់ត្រានេះប្រហែលជាត្រូវបានអនុម័ត ឬប្រគល់ត្រឡប់ដោយអ្នកត្រួតពិនិត្យផ្សេងរួចហើយ។ សូមផ្ទុកទំព័រឡើងវិញ ហើយព្យាយាមម្តងទៀត។",
+    accessRestricted: "ការចូលត្រូវបានបដិសេធ។ អ្នកមិនមានការអនុញ្ញាតឱ្យចូលមើលទំព័រនេះទេ។ សូមទាក់ទងអ្នកគ្រប់គ្រងរបស់អ្នក ប្រសិនបើអ្នកគិតថាអ្នកគួរតែមានសិទ្ធិចូលប្រើ។",
+    backToHome: "ត្រឡប់ទៅទំព័រដើម"
   }
 };

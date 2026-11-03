@@ -17,8 +17,9 @@ export default function ReviewDetailModal({ entry, language, onClose, onReview, 
   const submitter = entry.profiles?.full_name || entry.profiles?.username || (isKh ? 'អ្នកចូលរួម' : 'Contributor');
   const dateStr = new Date(entry.created_at).toLocaleDateString(isKh ? 'km-KH' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-  const approveStyle = { ...btnBase, backgroundColor: 'transparent', color: 'var(--green-primary, #436A0D)', border: '1.5px solid var(--green-primary, #436A0D)', cursor: isBusy ? 'not-allowed' : 'pointer' };
-  const returnStyle = { ...btnBase, backgroundColor: '#c62828', color: '#ffffff', border: '1.5px solid #c62828', cursor: isBusy ? 'not-allowed' : 'pointer' };
+  const isDisabled = isBusy || Boolean(error);
+  const approveStyle = { ...btnBase, backgroundColor: 'transparent', color: 'var(--green-primary, #436A0D)', border: '1.5px solid var(--green-primary, #436A0D)', cursor: isDisabled ? 'not-allowed' : 'pointer', opacity: isDisabled ? 0.5 : 1 };
+  const returnStyle = { ...btnBase, backgroundColor: '#c62828', color: '#ffffff', border: '1.5px solid #c62828', cursor: isDisabled ? 'not-allowed' : 'pointer', opacity: isDisabled ? 0.5 : 1 };
 
   return (
     <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }} onClick={onClose}>
@@ -60,12 +61,12 @@ export default function ReviewDetailModal({ entry, language, onClose, onReview, 
           </div>
         </div>
 
-        {error && <div style={{ padding: '0.75rem 1rem', marginTop: '1rem', backgroundColor: '#fee2e2', color: '#b91c1c', borderRadius: '6px', fontSize: '0.9rem', textAlign: 'center' }}>{error}</div>}
+        {error && <div style={{ padding: '0.75rem 1rem', marginTop: '1rem', backgroundColor: '#fee2e2', color: '#b91c1c', borderRadius: '6px', fontSize: '0.9rem', textAlign: 'center', lineHeight: 1.4 }}>{error}</div>}
 
         {/* 2 Buttons on Bottom */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)' }}>
-          <button onClick={() => onReview(entry.id, 'published')} disabled={isBusy} style={approveStyle}>{isKh ? 'អនុម័ត' : 'Approve'}</button>
-          <button onClick={() => onReview(entry.id, 'returned')} disabled={isBusy} style={returnStyle}>{isKh ? 'ប្រគល់ត្រឡប់' : 'Return'}</button>
+          <button onClick={() => { if (!isDisabled) onReview(entry.id, 'published'); }} disabled={isDisabled} style={approveStyle}>{isKh ? 'អនុម័ត' : 'Approve'}</button>
+          <button onClick={() => { if (!isDisabled) onReview(entry.id, 'returned'); }} disabled={isDisabled} style={returnStyle}>{isKh ? 'ប្រគល់ត្រឡប់' : 'Return'}</button>
         </div>
       </div>
     </div>

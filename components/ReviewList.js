@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createClient } from '../utils/supabase/client.js';
 import ReviewItemCard from './ReviewItemCard.js';
 import ReviewItemList from './ReviewItemList.js';
@@ -12,6 +12,7 @@ export default function ReviewList({ initialEntries, language }) {
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [busyId, setBusyId] = useState(null);
   const [errors, setErrors] = useState({});
+  const broadcastRef = useRef(null);
 
   const isKh = language === 'kh';
   const emptyMsg = isKh
@@ -20,19 +21,64 @@ export default function ReviewList({ initialEntries, language }) {
   const failMsg = isKh
     ? 'មិនអាចធ្វើបច្ចុប្បន្នភាពស្ថានភាពកំណត់ត្រាបានទេ។ សូមពិនិត្យការតភ្ជាប់ ហើយព្យាយាមម្តងទៀត។'
     : 'Failed to update entry status. Please check your connection and try again.';
+  const conflictMsg = isKh
+    ? 'មិនអាចបញ្ចប់សកម្មភាពនេះបានទេ។ កំណត់ត្រានេះប្រហែលជាត្រូវបានអនុម័ត ឬប្រគល់ត្រឡប់ដោយអ្នកត្រួតពិនិត្យផ្សេងរួចហើយ។ សូមផ្ទុកទំព័រឡើងវិញ ហើយព្យាយាមម្តងទៀត។'
+    : 'Unable to complete the action. This entry may have already been approved/returned by another reviewer. Please refresh and try again.';
+
+  useEffect(() => {
+    // Clear any leftover test keys from localStorage
+    if (typeof window !== 'undefined') {
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('reviewed_entry_')) localStorage.removeItem(key);
+      });
+      if ('BroadcastChannel' in window) {
+        const bc = new BroadcastChannel('khmer_archive_review_sync');
+        broadcastRef.current = bc;
+        bc.onmessage = (event) => {
+          if (event.data?.type === 'ENTRY_REVIEWED' && event.data?.entryId) {
+            setEntries(prev => prev.filter(e => e.id !== event.data.entryId));
+            setSelectedEntry(prev => (prev?.id === event.data.entryId ? null : prev));
+          }
+        };
+      }
+    }
+
+    return () => {
+      if (broadcastRef.current) broadcastRef.current.close();
+    };
+  }, []);
 
   const handleReview = async (entryId, decision) => {
+    if (busyId) return;
     setBusyId(entryId);
     try {
       const supabase = createClient();
+
+      // Guard: check that entry is still pending before reviewing
+      const { data: currentEntry, error: checkErr } = await supabase
+        .from('entries')
+        .select('status')
+        .eq('id', entryId)
+        .maybeSingle();
+
+      if (checkErr || !currentEntry || currentEntry.status !== 'pending') {
+        setErrors(prev => ({ ...prev, [entryId]: conflictMsg }));
+        return;
+      }
+
+      // Call database review function
       const { data, error } = await supabase.rpc('review_entry', {
         entry_id: entryId,
         decision
       });
 
-      if (error || data !== true) {
+      if (error) {
         setErrors(prev => ({ ...prev, [entryId]: failMsg }));
+      } else if (data !== true) {
+        // review_entry returned false (refused)
+        setErrors(prev => ({ ...prev, [entryId]: conflictMsg }));
       } else {
+        // data === true: review succeeded, remove from screen
         setEntries(prev => prev.filter(e => e.id !== entryId));
         if (selectedEntry?.id === entryId) setSelectedEntry(null);
         setErrors(prev => {
@@ -40,6 +86,9 @@ export default function ReviewList({ initialEntries, language }) {
           delete next[entryId];
           return next;
         });
+        if (broadcastRef.current) {
+          broadcastRef.current.postMessage({ type: 'ENTRY_REVIEWED', entryId });
+        }
       }
     } catch {
       setErrors(prev => ({ ...prev, [entryId]: failMsg }));

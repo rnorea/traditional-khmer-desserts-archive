@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Navbar from '../../../components/Navbar.js';
 import Footer from '../../../components/Footer.js';
 import ReviewList from '../../../components/ReviewList.js';
@@ -15,17 +16,23 @@ export default async function ReviewPage({ params }) {
 
   if (isReviewer !== true) {
     const unauthorizedMessage = isKh
-      ? 'ការចូលប្រើត្រូវបានកម្រិត។ អ្នកត្រូវតែជាអ្នកត្រួតពិនិត្យដើម្បីចូលមើលទំព័រនេះ។'
-      : 'Access restricted. You must be an administrator/reviewer to view the review queue.';
+      ? 'ការចូលត្រូវបានបដិសេធ។ អ្នកមិនមានការអនុញ្ញាតឱ្យចូលមើលទំព័រនេះទេ។ សូមទាក់ទងអ្នកគ្រប់គ្រងរបស់អ្នក ប្រសិនបើអ្នកគិតថាអ្នកគួរតែមានសិទ្ធិចូលប្រើ។'
+      : 'Access Denied. You are not authorized to view this page. Please contact your administrator if you believe you should have access.';
+    const homeBtnText = isKh ? 'ត្រឡប់ទៅទំព័រដើម' : 'Go to Homepage';
 
     return (
       <>
         <Navbar language={language} />
-        <main className="container" style={{ padding: '3rem 1rem', minHeight: '60vh' }}>
-          <div style={{ textAlign: 'center', padding: '3rem 1.5rem', backgroundColor: '#fee2e2', color: '#991b1b', borderRadius: '12px', border: '1px solid #fecaca' }}>
-            <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 500 }}>
+        <main className="container" style={{ padding: '4rem 1rem', minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ maxWidth: '520px', width: '100%', textAlign: 'center', padding: '2.5rem 2rem', backgroundColor: '#fee2e2', color: '#991b1b', borderRadius: '12px', border: '1px solid #fecaca', boxShadow: '0 4px 16px rgba(0,0,0,0.05)' }}>
+            <p style={{ margin: 0, fontSize: '1.05rem', lineHeight: '1.6', fontWeight: 500 }}>
               {unauthorizedMessage}
             </p>
+            <div style={{ marginTop: '1.75rem' }}>
+              <Link href={`/${language}`} className="btn-cta-primary" style={{ textDecoration: 'none', display: 'inline-flex', padding: '0.65rem 1.4rem' }}>
+                {homeBtnText}
+              </Link>
+            </div>
           </div>
         </main>
         <Footer language={language} />
