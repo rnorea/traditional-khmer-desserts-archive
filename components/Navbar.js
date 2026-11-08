@@ -148,13 +148,13 @@ export default function Navbar({ language }) {
                   </Link>
                 )}
 
-                <Link href={`/${language}/about`} className={`nav-link ${pathname.includes('/about') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>{text.aboutProject}</Link>
-
                 {isReviewer && (
                   <Link href="/review" className={`nav-link ${pathname.includes('/review') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
                     {text.review || (language === 'en' ? 'Review' : 'ត្រួតពិនិត្យ')}
                   </Link>
                 )}
+
+                <Link href={`/${language}/about`} className={`nav-link ${pathname.includes('/about') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>{text.aboutProject}</Link>
               </div>
 
               <div className="nav-actions" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
