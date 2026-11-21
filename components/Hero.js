@@ -4,6 +4,7 @@ import Link from "next/link";
 
 export default function Hero({ totalEntries, language }) {
   const text = t[language] || t.en;
+  const isKhmer = language === 'kh';
 
   return (
     <section className="hero-section">
@@ -16,12 +17,18 @@ export default function Hero({ totalEntries, language }) {
               {text.digitalHeritage}
             </div>
 
-            <h1 className="hero-title animate-stagger delay-2">
-              {language === 'kh' ? (collection.nameKm || collection.name) : collection.name} <i>{language === 'kh' ? (collection.sourceKm || collection.source) : collection.source}</i>
+            <h1
+              className="hero-title animate-stagger delay-2"
+              style={isKhmer ? { lineHeight: 1.55 } : undefined}
+            >
+              {isKhmer ? (collection.nameKm || collection.name) : collection.name} <i>{isKhmer ? (collection.sourceKm || collection.source) : collection.source}</i>
             </h1>
 
-            <p className="hero-description animate-stagger delay-3">
-              {language === 'kh' ? (collection.descriptionKm || collection.description) : collection.description}
+            <p
+              className="hero-description animate-stagger delay-3"
+              style={isKhmer ? { lineHeight: 1.85 } : undefined}
+            >
+              {isKhmer ? (collection.descriptionKm || collection.description) : collection.description}
             </p>
 
             <div className="hero-actions animate-stagger delay-4" style={{ alignItems: 'center' }}>
@@ -29,7 +36,7 @@ export default function Hero({ totalEntries, language }) {
                 {text.learnAbout}
               </Link>
               <div className="curator-label" style={{ display: 'inline-flex', alignItems: 'center', color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 500, padding: '0 12px' }}>
-                <span>{text.curatedBy} {language === 'kh' ? (collection.curatorKm || collection.curator) : collection.curator}</span>
+                <span>{text.curatedBy} {isKhmer ? (collection.curatorKm || collection.curator) : collection.curator}</span>
               </div>
             </div>
           </div>

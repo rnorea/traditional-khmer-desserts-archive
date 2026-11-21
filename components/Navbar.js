@@ -62,13 +62,54 @@ export default function Navbar({ language }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
+  useEffect(() => {
+    const syncLanguage = () => {
+      try {
+        const storedLang = localStorage.getItem('preferredLanguage');
+        if (storedLang && (storedLang === 'en' || storedLang === 'kh') && storedLang !== language) {
+          let newPath = pathname;
+          if (pathname.startsWith(`/${language}`)) {
+            newPath = pathname.replace(`/${language}`, `/${storedLang}`);
+          } else if (pathname === '/') {
+            newPath = `/${storedLang}`;
+          } else {
+            newPath = `/${storedLang}${pathname}`;
+          }
+          router.replace(newPath);
+        }
+      } catch {
+        // Ignore localStorage access errors
+      }
+    };
+
+    syncLanguage();
+
+    const handleStorageChange = (e) => {
+      if (e.key === 'preferredLanguage' && e.newValue && e.newValue !== language) {
+        syncLanguage();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('focus', syncLanguage);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('focus', syncLanguage);
+    };
+  }, [language, pathname, router]);
+
   const switchLanguage = () => {
     const newLang = language === 'en' ? 'kh' : 'en';
     
     // Set cookie for middleware
-    document.cookie = `NEXT_LOCALE=${newLang}; path=/; max-age=31536000`;
+    document.cookie = `NEXT_LOCALE=${newLang}; path=/; max-age=31536000; SameSite=Lax`;
     // Set local storage as user requested
-    localStorage.setItem('preferredLanguage', newLang);
+    try {
+      localStorage.setItem('preferredLanguage', newLang);
+    } catch {
+      // Ignore
+    }
 
     let newPath = pathname;
     if (pathname.startsWith(`/${language}`)) {
