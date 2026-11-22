@@ -6,7 +6,7 @@ A living digital archive preservingtraditional Khmer confectionery, recipes, and
 
 ## 1. What this is
 
-The **Khmer Desserts Archive** is an open-access cultural repository dedicated to preserving traditional Cambodian confectionery (*បង្អែមខ្មែរ*). Sourced from oral knowledge and local elders, chiefly Om Sokha in Tbong Khmum Province, the archive records indigenous ingredients, methods, and regional histories at risk of being lost. Visitors can explore authentic recipes in Khmer and English; contributors can register to submit family recipes; and archive reviewers evaluate each submission before publication.
+The **Khmer Desserts Archive** is an open-access cultural repository dedicated to preserving traditional Cambodian confectionery (*បង្អែមខ្មែរ*). Sourced from oral knowledge and local elders. The archive records indigenous ingredients, methods, and regional histories at risk of being lost. Visitors can explore authentic recipes in Khmer and English; contributors can register to submit family recipes; and archive reviewers evaluate each submission before publication.
 
 ---
 
@@ -71,10 +71,9 @@ AI tools assisted as pair-programmers with human review on every diff. Following
 ## 6. Sources and credits
 
 * **Primary Knowledge Bearer:**
-  * **Om Sokha (អ៊ំ សុខា)** — Traditional confectioner and elder, **Tbong Khmum Province (ខេត្តត្បូងឃ្មុំ)**. Contributed original recipes and methods for 10 core entries: *Nom Plae Ai*, *Chek Ktis*, *Sangkhya Lapov*, *Bobor Trav*, *Nom Bay Treab*, *Nom Tralach*, *Nom Saku Andet*, *Nom Kor Trav*, *Nom Krop*, and *Khao Mao Thot*.
-* **Regional Elders & Cooks:**
-  * Local confectioners in Siem Reap, Battambang, Kampong Cham, Kandal, Kampot, Pursat, and Prey Veng for traditional sticky rice cake techniques (*Nom Ansom Chek*, *Nom Ansom Chrouk*, *Nom Korm*, *Nom Bot*).
-* **Media:** Authentic photography from community documentation and credited Unsplash culinary contributors.
+  * **Om Sokha (អ៊ំ សុខា)**: Elder with a lot of traditional dessert making experiences, **Tbong Khmum Province (ខេត្តត្បូងឃ្មុំ)**. Contributed original recipes and methods for 10 core entries.
+* **Media:** [Hero image](https://i.ytimg.com/vi/6DSelYdEj1U/maxresdefault.jpg), [Palm Sugar Sticky Rice Balls](https://kroya.restaurant/media/pages/glossary/nom-plai-ai/4889cff611-1709196094/nom-plai-eye-600x.jpg), [Pumpkin Custard](https://i.ytimg.com/vi/3l7_Bda4lDE/maxresdefault.jpg), [Sticky Rice Crisps with Coconut](https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQVHVyMXW3M6hwkJJTFiT1Ytm8y_8OHR-BVHS1Lu-Svl5CpKPln), [Taro and Sticky Rice Pudding](https://thumbs.dreamstime.com/b/bobor-trao-21093535.jpg), [Banana in Sweet Coconut Milk](https://grantourismotravels.com/wp-content/uploads/2021/09/Banana-Coconut-Tapioca-Pudding-Recipe-for-Cambodian-Chek-Ktis-Copyright-2022-Terence-Carter-Grantourismo-T-500x500.jpg), [Crispy Rice Flour Cake](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeQuv4tEQ3O0IFR21pd091uZrw8S4f1-XBTPhizAOMdlJdjSEzmhUQkzc&s=10), [Floating Tapioca Pearls](https://i.ytimg.com/vi/_c5bkxDOYLY/maxresdefault.jpg), [Fried Pounded Rice with Banana](https://i.ytimg.com/vi/KHEhLdRSn58/maxresdefault.jpg), [Taro Cake](https://i.ytimg.com/vi/iAaKwVqHLBA/maxresdefault.jpg), [Winter Melon (Wax Gourd) Cake](https://i.ytimg.com/vi/9ZxOq79wMPE/maxresdefault.jpg)
+
 
 ---
 
@@ -108,19 +107,19 @@ Set these variable names in `.env.local` (never commit keys):
 
 ## Submission checklist
 
-- Live URL loads logged out and shows published entries only: yes, (URL)
-- A stranger cannot publish their own entry through the page or the console: yes, tested (date)
-- Logged out, the API returns nothing pending or returned: yes, tested (date)
+- Live URL loads logged out and shows published entries only: yes, [URL](https://traditional-khmer-desserts-archive.vercel.app/en)
+- A stranger cannot publish their own entry through the page or the console: yes, tested (22 November)
+- Logged out, the API returns nothing pending or returned: yes, tested (22 November)
 - Contributors can edit and delete only their own entries: yes
 - No secrets anywhere in the repo history: yes, checked with git log -S and search
 - At least eight real entries, each with a credited source: yes, (10 entries)
 - Khmer renders on every screen a user meets, including the queue: yes
-- Works at phone width: yes, tested on (device or browser width, e.g. 390px)
+- Works at phone width: yes, tested on (browser width ~440px)
 - No test entries, lorem ipsum or TODO comments in shipped pages: yes
 - No console errors on the main pages: yes
 - jesseorndorff is a collaborator on this repo: yes
-- Supabase project restored and awake on (date)
-- Demo video link opens in a private window: yes, (link)
+- Supabase project restored and awake on (22 November)
+- Demo video link opens in a private window: yes, [URL](https://youtu.be/0LyfW-6L34s)
 - Reflection pasted in the Canvas submission: yes
 - Posted in the Show Your Archive discussion: yes
-- Q&A slot booked for (date and time)
+- Q&A slot booked for (1 December, 2:05-2:10)
