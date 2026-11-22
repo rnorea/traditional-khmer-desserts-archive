@@ -36,20 +36,39 @@ export default function ArchivePage() {
 
   const text = t[language] || t.en;
 
-  // Load state from sessionStorage on mount
+  // Load state from sessionStorage and URL search params on mount
   useEffect(() => {
+    const urlCategory = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('category') : null;
+
     const savedState = sessionStorage.getItem('archiveState');
     if (savedState) {
       try {
         const parsed = JSON.parse(savedState);
         if (parsed.viewMode) setViewMode(parsed.viewMode);
         if (parsed.searchQuery) setSearchQuery(parsed.searchQuery);
-        if (parsed.filterType) setFilterType(parsed.filterType);
+        if (urlCategory) {
+          setFilterType(urlCategory);
+        } else if (parsed.filterType) {
+          setFilterType(parsed.filterType);
+        }
         if (parsed.sortType) setSortType(parsed.sortType);
         if (parsed.currentPage) setCurrentPage(parsed.currentPage);
         if (parsed.itemsPerPage) setItemsPerPage(parsed.itemsPerPage);
       } catch (e) {}
+    } else if (urlCategory) {
+      setFilterType(urlCategory);
     }
+
+    const handleLocationChange = () => {
+      const cat = new URLSearchParams(window.location.search).get('category');
+      if (cat) {
+        setFilterType(cat);
+        setCurrentPage(1);
+      }
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
   }, []);
 
   // Sync state to sessionStorage
